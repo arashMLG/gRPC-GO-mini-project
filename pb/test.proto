@@ -1,3 +1,15 @@
 syntax = "proto3";
 package test;
 option go_package = "GRPC-GO-MINI-PROJECT/pb";
+
+service Greeter {
+    rpc SayHelloWorld (HelloWorldRequest) returns (HelloWorldReplay);
+}
+
+message HelloWorldRequest {
+    string name = 1;
+}
+
+message HelloWorldReplay {
+    string message = 1;
+}

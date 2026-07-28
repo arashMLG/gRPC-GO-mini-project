@@ -10,6 +10,7 @@ import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
+	sync "sync"
 	unsafe "unsafe"
 )
 
@@ -20,16 +21,128 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+type HelloWorldRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *HelloWorldRequest) Reset() {
+	*x = HelloWorldRequest{}
+	mi := &file_pb_test_proto_msgTypes[0]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *HelloWorldRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*HelloWorldRequest) ProtoMessage() {}
+
+func (x *HelloWorldRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_pb_test_proto_msgTypes[0]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use HelloWorldRequest.ProtoReflect.Descriptor instead.
+func (*HelloWorldRequest) Descriptor() ([]byte, []int) {
+	return file_pb_test_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *HelloWorldRequest) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+type HelloWorldReplay struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Message       string                 `protobuf:"bytes,1,opt,name=message,proto3" json:"message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *HelloWorldReplay) Reset() {
+	*x = HelloWorldReplay{}
+	mi := &file_pb_test_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *HelloWorldReplay) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*HelloWorldReplay) ProtoMessage() {}
+
+func (x *HelloWorldReplay) ProtoReflect() protoreflect.Message {
+	mi := &file_pb_test_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use HelloWorldReplay.ProtoReflect.Descriptor instead.
+func (*HelloWorldReplay) Descriptor() ([]byte, []int) {
+	return file_pb_test_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *HelloWorldReplay) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
 var File_pb_test_proto protoreflect.FileDescriptor
 
 const file_pb_test_proto_rawDesc = "" +
 	"\n" +
-	"\rpb/test.proto\x12\x04testB\x19Z\x17GRPC-GO-MINI-PROJECT/pbb\x06proto3"
+	"\rpb/test.proto\x12\x04test\"'\n" +
+	"\x11HelloWorldRequest\x12\x12\n" +
+	"\x04name\x18\x01 \x01(\tR\x04name\",\n" +
+	"\x10HelloWorldReplay\x12\x18\n" +
+	"\amessage\x18\x01 \x01(\tR\amessage2K\n" +
+	"\aGreeter\x12@\n" +
+	"\rSayHelloWorld\x12\x17.test.HelloWorldRequest\x1a\x16.test.HelloWorldReplayB\x19Z\x17GRPC-GO-MINI-PROJECT/pbb\x06proto3"
 
-var file_pb_test_proto_goTypes = []any{}
+var (
+	file_pb_test_proto_rawDescOnce sync.Once
+	file_pb_test_proto_rawDescData []byte
+)
+
+func file_pb_test_proto_rawDescGZIP() []byte {
+	file_pb_test_proto_rawDescOnce.Do(func() {
+		file_pb_test_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_pb_test_proto_rawDesc), len(file_pb_test_proto_rawDesc)))
+	})
+	return file_pb_test_proto_rawDescData
+}
+
+var file_pb_test_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_pb_test_proto_goTypes = []any{
+	(*HelloWorldRequest)(nil), // 0: test.HelloWorldRequest
+	(*HelloWorldReplay)(nil),  // 1: test.HelloWorldReplay
+}
 var file_pb_test_proto_depIdxs = []int32{
-	0, // [0:0] is the sub-list for method output_type
-	0, // [0:0] is the sub-list for method input_type
+	0, // 0: test.Greeter.SayHelloWorld:input_type -> test.HelloWorldRequest
+	1, // 1: test.Greeter.SayHelloWorld:output_type -> test.HelloWorldReplay
+	1, // [1:2] is the sub-list for method output_type
+	0, // [0:1] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
 	0, // [0:0] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name
@@ -46,12 +159,13 @@ func file_pb_test_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_pb_test_proto_rawDesc), len(file_pb_test_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   0,
+			NumMessages:   2,
 			NumExtensions: 0,
-			NumServices:   0,
+			NumServices:   1,
 		},
 		GoTypes:           file_pb_test_proto_goTypes,
 		DependencyIndexes: file_pb_test_proto_depIdxs,
+		MessageInfos:      file_pb_test_proto_msgTypes,
 	}.Build()
 	File_pb_test_proto = out.File
 	file_pb_test_proto_goTypes = nil
