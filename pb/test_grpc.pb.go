@@ -119,3 +119,181 @@ var Greeter_ServiceDesc = grpc.ServiceDesc{
 	Streams:  []grpc.StreamDesc{},
 	Metadata: "pb/test.proto",
 }
+
+const (
+	Game_Register_FullMethodName = "/test.Game/Register"
+	Game_Login_FullMethodName    = "/test.Game/Login"
+	Game_Play_FullMethodName     = "/test.Game/Play"
+)
+
+// GameClient is the client API for Game service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+type GameClient interface {
+	Register(ctx context.Context, in *RegisterRequest, opts ...grpc.CallOption) (*RegisterReply, error)
+	Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginReply, error)
+	Play(ctx context.Context, in *PlayRequest, opts ...grpc.CallOption) (*PlayReply, error)
+}
+
+type gameClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewGameClient(cc grpc.ClientConnInterface) GameClient {
+	return &gameClient{cc}
+}
+
+func (c *gameClient) Register(ctx context.Context, in *RegisterRequest, opts ...grpc.CallOption) (*RegisterReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(RegisterReply)
+	err := c.cc.Invoke(ctx, Game_Register_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *gameClient) Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(LoginReply)
+	err := c.cc.Invoke(ctx, Game_Login_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *gameClient) Play(ctx context.Context, in *PlayRequest, opts ...grpc.CallOption) (*PlayReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(PlayReply)
+	err := c.cc.Invoke(ctx, Game_Play_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// GameServer is the server API for Game service.
+// All implementations must embed UnimplementedGameServer
+// for forward compatibility.
+type GameServer interface {
+	Register(context.Context, *RegisterRequest) (*RegisterReply, error)
+	Login(context.Context, *LoginRequest) (*LoginReply, error)
+	Play(context.Context, *PlayRequest) (*PlayReply, error)
+	mustEmbedUnimplementedGameServer()
+}
+
+// UnimplementedGameServer must be embedded to have
+// forward compatible implementations.
+//
+// NOTE: this should be embedded by value instead of pointer to avoid a nil
+// pointer dereference when methods are called.
+type UnimplementedGameServer struct{}
+
+func (UnimplementedGameServer) Register(context.Context, *RegisterRequest) (*RegisterReply, error) {
+	return nil, status.Error(codes.Unimplemented, "method Register not implemented")
+}
+func (UnimplementedGameServer) Login(context.Context, *LoginRequest) (*LoginReply, error) {
+	return nil, status.Error(codes.Unimplemented, "method Login not implemented")
+}
+func (UnimplementedGameServer) Play(context.Context, *PlayRequest) (*PlayReply, error) {
+	return nil, status.Error(codes.Unimplemented, "method Play not implemented")
+}
+func (UnimplementedGameServer) mustEmbedUnimplementedGameServer() {}
+func (UnimplementedGameServer) testEmbeddedByValue()              {}
+
+// UnsafeGameServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to GameServer will
+// result in compilation errors.
+type UnsafeGameServer interface {
+	mustEmbedUnimplementedGameServer()
+}
+
+func RegisterGameServer(s grpc.ServiceRegistrar, srv GameServer) {
+	// If the following call panics, it indicates UnimplementedGameServer was
+	// embedded by pointer and is nil.  This will cause panics if an
+	// unimplemented method is ever invoked, so we test this at initialization
+	// time to prevent it from happening at runtime later due to I/O.
+	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
+		t.testEmbeddedByValue()
+	}
+	s.RegisterService(&Game_ServiceDesc, srv)
+}
+
+func _Game_Register_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RegisterRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GameServer).Register(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Game_Register_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GameServer).Register(ctx, req.(*RegisterRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Game_Login_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LoginRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GameServer).Login(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Game_Login_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GameServer).Login(ctx, req.(*LoginRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Game_Play_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PlayRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GameServer).Play(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Game_Play_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GameServer).Play(ctx, req.(*PlayRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// Game_ServiceDesc is the grpc.ServiceDesc for Game service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var Game_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "test.Game",
+	HandlerType: (*GameServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "Register",
+			Handler:    _Game_Register_Handler,
+		},
+		{
+			MethodName: "Login",
+			Handler:    _Game_Login_Handler,
+		},
+		{
+			MethodName: "Play",
+			Handler:    _Game_Play_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "pb/test.proto",
+}

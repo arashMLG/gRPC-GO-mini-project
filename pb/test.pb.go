@@ -109,6 +109,318 @@ func (x *HelloWorldReplay) GetMessage() string {
 	return ""
 }
 
+type RegisterRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Username      string                 `protobuf:"bytes,1,opt,name=username,proto3" json:"username,omitempty"`
+	Password      string                 `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *RegisterRequest) Reset() {
+	*x = RegisterRequest{}
+	mi := &file_pb_test_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RegisterRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RegisterRequest) ProtoMessage() {}
+
+func (x *RegisterRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_pb_test_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RegisterRequest.ProtoReflect.Descriptor instead.
+func (*RegisterRequest) Descriptor() ([]byte, []int) {
+	return file_pb_test_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *RegisterRequest) GetUsername() string {
+	if x != nil {
+		return x.Username
+	}
+	return ""
+}
+
+func (x *RegisterRequest) GetPassword() string {
+	if x != nil {
+		return x.Password
+	}
+	return ""
+}
+
+type RegisterReply struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Message       string                 `protobuf:"bytes,1,opt,name=message,proto3" json:"message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *RegisterReply) Reset() {
+	*x = RegisterReply{}
+	mi := &file_pb_test_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RegisterReply) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RegisterReply) ProtoMessage() {}
+
+func (x *RegisterReply) ProtoReflect() protoreflect.Message {
+	mi := &file_pb_test_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RegisterReply.ProtoReflect.Descriptor instead.
+func (*RegisterReply) Descriptor() ([]byte, []int) {
+	return file_pb_test_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *RegisterReply) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
+type LoginRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Username      string                 `protobuf:"bytes,1,opt,name=username,proto3" json:"username,omitempty"`
+	Password      string                 `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *LoginRequest) Reset() {
+	*x = LoginRequest{}
+	mi := &file_pb_test_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *LoginRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*LoginRequest) ProtoMessage() {}
+
+func (x *LoginRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_pb_test_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use LoginRequest.ProtoReflect.Descriptor instead.
+func (*LoginRequest) Descriptor() ([]byte, []int) {
+	return file_pb_test_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *LoginRequest) GetUsername() string {
+	if x != nil {
+		return x.Username
+	}
+	return ""
+}
+
+func (x *LoginRequest) GetPassword() string {
+	if x != nil {
+		return x.Password
+	}
+	return ""
+}
+
+type LoginReply struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Token         string                 `protobuf:"bytes,1,opt,name=token,proto3" json:"token,omitempty"`
+	Message       string                 `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *LoginReply) Reset() {
+	*x = LoginReply{}
+	mi := &file_pb_test_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *LoginReply) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*LoginReply) ProtoMessage() {}
+
+func (x *LoginReply) ProtoReflect() protoreflect.Message {
+	mi := &file_pb_test_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use LoginReply.ProtoReflect.Descriptor instead.
+func (*LoginReply) Descriptor() ([]byte, []int) {
+	return file_pb_test_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *LoginReply) GetToken() string {
+	if x != nil {
+		return x.Token
+	}
+	return ""
+}
+
+func (x *LoginReply) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
+type PlayRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Token         string                 `protobuf:"bytes,1,opt,name=token,proto3" json:"token,omitempty"`
+	Word          string                 `protobuf:"bytes,2,opt,name=word,proto3" json:"word,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PlayRequest) Reset() {
+	*x = PlayRequest{}
+	mi := &file_pb_test_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PlayRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PlayRequest) ProtoMessage() {}
+
+func (x *PlayRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_pb_test_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PlayRequest.ProtoReflect.Descriptor instead.
+func (*PlayRequest) Descriptor() ([]byte, []int) {
+	return file_pb_test_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *PlayRequest) GetToken() string {
+	if x != nil {
+		return x.Token
+	}
+	return ""
+}
+
+func (x *PlayRequest) GetWord() string {
+	if x != nil {
+		return x.Word
+	}
+	return ""
+}
+
+type PlayReply struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	PointsChange  int32                  `protobuf:"varint,1,opt,name=points_change,json=pointsChange,proto3" json:"points_change,omitempty"`
+	TotalPoints   int32                  `protobuf:"varint,2,opt,name=total_points,json=totalPoints,proto3" json:"total_points,omitempty"`
+	Message       string                 `protobuf:"bytes,3,opt,name=message,proto3" json:"message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PlayReply) Reset() {
+	*x = PlayReply{}
+	mi := &file_pb_test_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PlayReply) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PlayReply) ProtoMessage() {}
+
+func (x *PlayReply) ProtoReflect() protoreflect.Message {
+	mi := &file_pb_test_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PlayReply.ProtoReflect.Descriptor instead.
+func (*PlayReply) Descriptor() ([]byte, []int) {
+	return file_pb_test_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *PlayReply) GetPointsChange() int32 {
+	if x != nil {
+		return x.PointsChange
+	}
+	return 0
+}
+
+func (x *PlayReply) GetTotalPoints() int32 {
+	if x != nil {
+		return x.TotalPoints
+	}
+	return 0
+}
+
+func (x *PlayReply) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
 var File_pb_test_proto protoreflect.FileDescriptor
 
 const file_pb_test_proto_rawDesc = "" +
@@ -117,9 +429,33 @@ const file_pb_test_proto_rawDesc = "" +
 	"\x11HelloWorldRequest\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\",\n" +
 	"\x10HelloWorldReplay\x12\x18\n" +
-	"\amessage\x18\x01 \x01(\tR\amessage2K\n" +
+	"\amessage\x18\x01 \x01(\tR\amessage\"I\n" +
+	"\x0fRegisterRequest\x12\x1a\n" +
+	"\busername\x18\x01 \x01(\tR\busername\x12\x1a\n" +
+	"\bpassword\x18\x02 \x01(\tR\bpassword\")\n" +
+	"\rRegisterReply\x12\x18\n" +
+	"\amessage\x18\x01 \x01(\tR\amessage\"F\n" +
+	"\fLoginRequest\x12\x1a\n" +
+	"\busername\x18\x01 \x01(\tR\busername\x12\x1a\n" +
+	"\bpassword\x18\x02 \x01(\tR\bpassword\"<\n" +
+	"\n" +
+	"LoginReply\x12\x14\n" +
+	"\x05token\x18\x01 \x01(\tR\x05token\x12\x18\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage\"7\n" +
+	"\vPlayRequest\x12\x14\n" +
+	"\x05token\x18\x01 \x01(\tR\x05token\x12\x12\n" +
+	"\x04word\x18\x02 \x01(\tR\x04word\"m\n" +
+	"\tPlayReply\x12#\n" +
+	"\rpoints_change\x18\x01 \x01(\x05R\fpointsChange\x12!\n" +
+	"\ftotal_points\x18\x02 \x01(\x05R\vtotalPoints\x12\x18\n" +
+	"\amessage\x18\x03 \x01(\tR\amessage2K\n" +
 	"\aGreeter\x12@\n" +
-	"\rSayHelloWorld\x12\x17.test.HelloWorldRequest\x1a\x16.test.HelloWorldReplayB\x19Z\x17GRPC-GO-MINI-PROJECT/pbb\x06proto3"
+	"\rSayHelloWorld\x12\x17.test.HelloWorldRequest\x1a\x16.test.HelloWorldReplay2\x99\x01\n" +
+	"\x04Game\x126\n" +
+	"\bRegister\x12\x15.test.RegisterRequest\x1a\x13.test.RegisterReply\x12-\n" +
+	"\x05Login\x12\x12.test.LoginRequest\x1a\x10.test.LoginReply\x12*\n" +
+	"\x04Play\x12\x11.test.PlayRequest\x1a\x0f.test.PlayReplyB\n" +
+	"Z\bmyGuy/pbb\x06proto3"
 
 var (
 	file_pb_test_proto_rawDescOnce sync.Once
@@ -133,16 +469,28 @@ func file_pb_test_proto_rawDescGZIP() []byte {
 	return file_pb_test_proto_rawDescData
 }
 
-var file_pb_test_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_pb_test_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
 var file_pb_test_proto_goTypes = []any{
 	(*HelloWorldRequest)(nil), // 0: test.HelloWorldRequest
 	(*HelloWorldReplay)(nil),  // 1: test.HelloWorldReplay
+	(*RegisterRequest)(nil),   // 2: test.RegisterRequest
+	(*RegisterReply)(nil),     // 3: test.RegisterReply
+	(*LoginRequest)(nil),      // 4: test.LoginRequest
+	(*LoginReply)(nil),        // 5: test.LoginReply
+	(*PlayRequest)(nil),       // 6: test.PlayRequest
+	(*PlayReply)(nil),         // 7: test.PlayReply
 }
 var file_pb_test_proto_depIdxs = []int32{
 	0, // 0: test.Greeter.SayHelloWorld:input_type -> test.HelloWorldRequest
-	1, // 1: test.Greeter.SayHelloWorld:output_type -> test.HelloWorldReplay
-	1, // [1:2] is the sub-list for method output_type
-	0, // [0:1] is the sub-list for method input_type
+	2, // 1: test.Game.Register:input_type -> test.RegisterRequest
+	4, // 2: test.Game.Login:input_type -> test.LoginRequest
+	6, // 3: test.Game.Play:input_type -> test.PlayRequest
+	1, // 4: test.Greeter.SayHelloWorld:output_type -> test.HelloWorldReplay
+	3, // 5: test.Game.Register:output_type -> test.RegisterReply
+	5, // 6: test.Game.Login:output_type -> test.LoginReply
+	7, // 7: test.Game.Play:output_type -> test.PlayReply
+	4, // [4:8] is the sub-list for method output_type
+	0, // [0:4] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
 	0, // [0:0] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name
@@ -159,9 +507,9 @@ func file_pb_test_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_pb_test_proto_rawDesc), len(file_pb_test_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   2,
+			NumMessages:   8,
 			NumExtensions: 0,
-			NumServices:   1,
+			NumServices:   2,
 		},
 		GoTypes:           file_pb_test_proto_goTypes,
 		DependencyIndexes: file_pb_test_proto_depIdxs,

@@ -1,10 +1,13 @@
 package main
 
 import (
+	"bufio"
 	"context"
+	"fmt"
 	"log"
 	"myGuy/pb"
 	"os"
+	"strings"
 	"time"
 
 	"google.golang.org/grpc"
@@ -12,30 +15,59 @@ import (
 )
 
 func main() {
-	name := ""
-
-	if len(os.Args) > 1 {
-		name = os.Args[1]
-	}
-
-	conn, err := grpc.NewClient(
-		"localhost:50051",
-		grpc.WithTransportCredentials(insecure.NewCredentials()), // No TLS
-	)
-
+	conn, err := grpc.NewClient("localhost:50051",
+		grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("Couldn't connect: %v", err)
 	}
-
 	defer conn.Close()
 
-	client := pb.NewGreeterClient(conn)
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
-	defer cancel()
+	client := pb.NewGameClient(conn)
 
-	resp, err := client.SayHelloWorld(ctx, &pb.HelloWorldRequest{Name: name})
-	if err != nil {
-		log.Fatalf("Recevied error in Greeting: %v", err)
+	reader := bufio.NewScanner(os.Stdin)
+
+	ask := func(prompt string) string {
+		fmt.Print(prompt)
+		reader.Scan()
+		return strings.TrimSpace(reader.Text())
 	}
-	log.Printf("Server replied %s", resp.GetMessage())
+
+	username := ask("Username :")
+	password := ask("Password :")
+
+	if strings.ToLower(ask("Register new account? (y/n):  ")) == "y" {
+		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+		_, err := client.Register(ctx, &pb.RegisterRequest{Username: username, Password: password})
+		cancel()
+		if err != nil {
+			log.Fatalf("Register failed : %v", err)
+		}
+		fmt.Println("Account created")
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	LoginRep, err := client.Login(ctx, &pb.LoginRequest{Username: username, Password: password})
+	cancel()
+	if err != nil {
+		log.Fatalf("Login failed: %v", err)
+	}
+	token := LoginRep.GetToken()
+	fmt.Println(LoginRep.GetMessage())
+	for {
+		word := ask("> ")
+		if word == "quit" {
+			break
+		}
+		ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+		rep, err := client.Play(ctx, &pb.PlayRequest{Token: token, Word: word})
+		cancel()
+		if err != nil {
+			log.Printf("Idk error : %v", err)
+			continue
+		}
+		fmt.Printf("What gods think of you as a number : %+d\nWhat gods think of you in text: %s\n",
+			rep.GetPointsChange(), rep.GetMessage())
+
+	}
+	fmt.Printf("meow")
 }
