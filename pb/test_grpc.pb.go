@@ -124,6 +124,7 @@ const (
 	Game_Register_FullMethodName = "/test.Game/Register"
 	Game_Login_FullMethodName    = "/test.Game/Login"
 	Game_Play_FullMethodName     = "/test.Game/Play"
+	Game_Chat_FullMethodName     = "/test.Game/Chat"
 )
 
 // GameClient is the client API for Game service.
@@ -133,6 +134,7 @@ type GameClient interface {
 	Register(ctx context.Context, in *RegisterRequest, opts ...grpc.CallOption) (*RegisterReply, error)
 	Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginReply, error)
 	Play(ctx context.Context, in *PlayRequest, opts ...grpc.CallOption) (*PlayReply, error)
+	Chat(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[ChatMessage, ChatMessage], error)
 }
 
 type gameClient struct {
@@ -173,6 +175,19 @@ func (c *gameClient) Play(ctx context.Context, in *PlayRequest, opts ...grpc.Cal
 	return out, nil
 }
 
+func (c *gameClient) Chat(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[ChatMessage, ChatMessage], error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	stream, err := c.cc.NewStream(ctx, &Game_ServiceDesc.Streams[0], Game_Chat_FullMethodName, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &grpc.GenericClientStream[ChatMessage, ChatMessage]{ClientStream: stream}
+	return x, nil
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type Game_ChatClient = grpc.BidiStreamingClient[ChatMessage, ChatMessage]
+
 // GameServer is the server API for Game service.
 // All implementations must embed UnimplementedGameServer
 // for forward compatibility.
@@ -180,6 +195,7 @@ type GameServer interface {
 	Register(context.Context, *RegisterRequest) (*RegisterReply, error)
 	Login(context.Context, *LoginRequest) (*LoginReply, error)
 	Play(context.Context, *PlayRequest) (*PlayReply, error)
+	Chat(grpc.BidiStreamingServer[ChatMessage, ChatMessage]) error
 	mustEmbedUnimplementedGameServer()
 }
 
@@ -198,6 +214,9 @@ func (UnimplementedGameServer) Login(context.Context, *LoginRequest) (*LoginRepl
 }
 func (UnimplementedGameServer) Play(context.Context, *PlayRequest) (*PlayReply, error) {
 	return nil, status.Error(codes.Unimplemented, "method Play not implemented")
+}
+func (UnimplementedGameServer) Chat(grpc.BidiStreamingServer[ChatMessage, ChatMessage]) error {
+	return status.Error(codes.Unimplemented, "method Chat not implemented")
 }
 func (UnimplementedGameServer) mustEmbedUnimplementedGameServer() {}
 func (UnimplementedGameServer) testEmbeddedByValue()              {}
@@ -274,6 +293,13 @@ func _Game_Play_Handler(srv interface{}, ctx context.Context, dec func(interface
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Game_Chat_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(GameServer).Chat(&grpc.GenericServerStream[ChatMessage, ChatMessage]{ServerStream: stream})
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type Game_ChatServer = grpc.BidiStreamingServer[ChatMessage, ChatMessage]
+
 // Game_ServiceDesc is the grpc.ServiceDesc for Game service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -294,6 +320,13 @@ var Game_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Game_Play_Handler,
 		},
 	},
-	Streams:  []grpc.StreamDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "Chat",
+			Handler:       _Game_Chat_Handler,
+			ServerStreams: true,
+			ClientStreams: true,
+		},
+	},
 	Metadata: "pb/test.proto",
 }

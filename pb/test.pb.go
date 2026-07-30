@@ -421,6 +421,66 @@ func (x *PlayReply) GetMessage() string {
 	return ""
 }
 
+type ChatMessage struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Token         string                 `protobuf:"bytes,1,opt,name=token,proto3" json:"token,omitempty"`
+	Username      string                 `protobuf:"bytes,2,opt,name=username,proto3" json:"username,omitempty"`
+	Text          string                 `protobuf:"bytes,3,opt,name=text,proto3" json:"text,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ChatMessage) Reset() {
+	*x = ChatMessage{}
+	mi := &file_pb_test_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ChatMessage) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ChatMessage) ProtoMessage() {}
+
+func (x *ChatMessage) ProtoReflect() protoreflect.Message {
+	mi := &file_pb_test_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ChatMessage.ProtoReflect.Descriptor instead.
+func (*ChatMessage) Descriptor() ([]byte, []int) {
+	return file_pb_test_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *ChatMessage) GetToken() string {
+	if x != nil {
+		return x.Token
+	}
+	return ""
+}
+
+func (x *ChatMessage) GetUsername() string {
+	if x != nil {
+		return x.Username
+	}
+	return ""
+}
+
+func (x *ChatMessage) GetText() string {
+	if x != nil {
+		return x.Text
+	}
+	return ""
+}
+
 var File_pb_test_proto protoreflect.FileDescriptor
 
 const file_pb_test_proto_rawDesc = "" +
@@ -448,13 +508,18 @@ const file_pb_test_proto_rawDesc = "" +
 	"\tPlayReply\x12#\n" +
 	"\rpoints_change\x18\x01 \x01(\x05R\fpointsChange\x12!\n" +
 	"\ftotal_points\x18\x02 \x01(\x05R\vtotalPoints\x12\x18\n" +
-	"\amessage\x18\x03 \x01(\tR\amessage2K\n" +
+	"\amessage\x18\x03 \x01(\tR\amessage\"S\n" +
+	"\vChatMessage\x12\x14\n" +
+	"\x05token\x18\x01 \x01(\tR\x05token\x12\x1a\n" +
+	"\busername\x18\x02 \x01(\tR\busername\x12\x12\n" +
+	"\x04text\x18\x03 \x01(\tR\x04text2K\n" +
 	"\aGreeter\x12@\n" +
-	"\rSayHelloWorld\x12\x17.test.HelloWorldRequest\x1a\x16.test.HelloWorldReplay2\x99\x01\n" +
+	"\rSayHelloWorld\x12\x17.test.HelloWorldRequest\x1a\x16.test.HelloWorldReplay2\xcb\x01\n" +
 	"\x04Game\x126\n" +
 	"\bRegister\x12\x15.test.RegisterRequest\x1a\x13.test.RegisterReply\x12-\n" +
 	"\x05Login\x12\x12.test.LoginRequest\x1a\x10.test.LoginReply\x12*\n" +
-	"\x04Play\x12\x11.test.PlayRequest\x1a\x0f.test.PlayReplyB\n" +
+	"\x04Play\x12\x11.test.PlayRequest\x1a\x0f.test.PlayReply\x120\n" +
+	"\x04Chat\x12\x11.test.ChatMessage\x1a\x11.test.ChatMessage(\x010\x01B\n" +
 	"Z\bmyGuy/pbb\x06proto3"
 
 var (
@@ -469,7 +534,7 @@ func file_pb_test_proto_rawDescGZIP() []byte {
 	return file_pb_test_proto_rawDescData
 }
 
-var file_pb_test_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
+var file_pb_test_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
 var file_pb_test_proto_goTypes = []any{
 	(*HelloWorldRequest)(nil), // 0: test.HelloWorldRequest
 	(*HelloWorldReplay)(nil),  // 1: test.HelloWorldReplay
@@ -479,18 +544,21 @@ var file_pb_test_proto_goTypes = []any{
 	(*LoginReply)(nil),        // 5: test.LoginReply
 	(*PlayRequest)(nil),       // 6: test.PlayRequest
 	(*PlayReply)(nil),         // 7: test.PlayReply
+	(*ChatMessage)(nil),       // 8: test.ChatMessage
 }
 var file_pb_test_proto_depIdxs = []int32{
 	0, // 0: test.Greeter.SayHelloWorld:input_type -> test.HelloWorldRequest
 	2, // 1: test.Game.Register:input_type -> test.RegisterRequest
 	4, // 2: test.Game.Login:input_type -> test.LoginRequest
 	6, // 3: test.Game.Play:input_type -> test.PlayRequest
-	1, // 4: test.Greeter.SayHelloWorld:output_type -> test.HelloWorldReplay
-	3, // 5: test.Game.Register:output_type -> test.RegisterReply
-	5, // 6: test.Game.Login:output_type -> test.LoginReply
-	7, // 7: test.Game.Play:output_type -> test.PlayReply
-	4, // [4:8] is the sub-list for method output_type
-	0, // [0:4] is the sub-list for method input_type
+	8, // 4: test.Game.Chat:input_type -> test.ChatMessage
+	1, // 5: test.Greeter.SayHelloWorld:output_type -> test.HelloWorldReplay
+	3, // 6: test.Game.Register:output_type -> test.RegisterReply
+	5, // 7: test.Game.Login:output_type -> test.LoginReply
+	7, // 8: test.Game.Play:output_type -> test.PlayReply
+	8, // 9: test.Game.Chat:output_type -> test.ChatMessage
+	5, // [5:10] is the sub-list for method output_type
+	0, // [0:5] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
 	0, // [0:0] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name
@@ -507,7 +575,7 @@ func file_pb_test_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_pb_test_proto_rawDesc), len(file_pb_test_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   8,
+			NumMessages:   9,
 			NumExtensions: 0,
 			NumServices:   2,
 		},

@@ -51,22 +51,61 @@ func main() {
 	if err != nil {
 		log.Fatalf("Login failed: %v", err)
 	}
+
+	stream, err := client.Chat(context.Background())
+	if err != nil {
+		log.Fatalf("couldn't open chat : %v", err)
+	}
+	fmt.Printf("Connected to chatroom. type \"/chat\" to start chatting and \"/game\" to go back to game.\"/quit\" to quit.\n")
+
+	go func() {
+		for {
+			msg, err := stream.Recv()
+			if err != nil {
+				return
+			}
+			if username != msg.GetUsername() {
+				fmt.Printf("\n%s said :%s\n> ", msg.GetUsername(), msg.GetText())
+			}
+		}
+	}()
+
 	token := LoginRep.GetToken()
 	fmt.Println(LoginRep.GetMessage())
+	state := 0
 	for {
-		word := ask("> ")
-		if word == "quit" {
+		text := ask("> ")
+		if text == "/quit" {
 			break
 		}
-		ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
-		rep, err := client.Play(ctx, &pb.PlayRequest{Token: token, Word: word})
-		cancel()
-		if err != nil {
-			log.Printf("Idk error : %v", err)
+		if text == "/game" && state == 1 {
+			state = 0
 			continue
 		}
-		fmt.Printf("What gods think of you as a number : %+d\nWhat gods think of you in text: %s\n",
-			rep.GetPointsChange(), rep.GetMessage())
+		if text == "/chat" && state == 0 {
+			state = 1
+			continue
+		}
+		switch state {
+		case 0:
+			ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+			rep, err := client.Play(ctx, &pb.PlayRequest{Token: token, Word: text})
+			cancel()
+			if err != nil {
+				log.Printf("Idk error : %v", err)
+				continue
+			}
+			fmt.Printf("What gods think of you as a number : %+d\nWhat gods think of you in text: %s\n",
+				rep.GetPointsChange(), rep.GetMessage())
+		case 1:
+			if text == "" {
+				continue
+			}
+			if err := stream.Send(&pb.ChatMessage{Token: token, Text: text}); err != nil {
+				log.Printf("send failed: %v", err)
+				break
+			}
+		}
 
 	}
 	fmt.Printf("meow")

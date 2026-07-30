@@ -18,6 +18,7 @@ service Game {
     rpc Register (RegisterRequest) returns (RegisterReply);
     rpc Login    (LoginRequest)    returns (LoginReply);
     rpc Play     (PlayRequest)     returns (PlayReply);
+    rpc Chat (stream ChatMessage) returns (stream ChatMessage);
 }
 
 message RegisterRequest {
@@ -48,4 +49,10 @@ message PlayReply {
     int32 points_change = 1;
     int32 total_points = 2;
     string message = 3;
+}
+
+message ChatMessage {
+    string token =1;
+    string username = 2;
+    string text = 3;
 }
