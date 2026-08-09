@@ -1,0 +1,45 @@
+services:
+
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: arash
+      POSTGRES_PASSWORD: arash
+      POSTGRES_DB: database
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./db/dbcode.sql:/docker-entrypoint-initdb.d/schema.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U arash -d database"]
+      interval: 3s
+      timeout: 3s
+      retries: 10
+
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "50051:50051"
+    environment:
+      DATABASE_URL: "postgres://arash:arash@db:5432/database?sslmode=disable"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  client:
+    build:
+      context: .
+      dockerfile: Dockerfile.client
+    environment:
+      SERVER_ADDR: "server:50051"
+    depends_on:
+      - server
+    stdin_open: true
+    tty: true
+    profiles: ["manual"]
+
+volumes:
+  pgdata:
