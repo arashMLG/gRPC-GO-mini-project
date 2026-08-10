@@ -19,6 +19,7 @@ service Game {
     rpc Login    (LoginRequest)    returns (LoginReply);
     rpc Play     (PlayRequest)     returns (PlayReply);
     rpc Chat (stream ChatMessage) returns (stream ChatMessage);
+    rpc Leaderboard (LeaderboardRequest) returns (stream LeaderboardReply);
 }
 
 message RegisterRequest {
@@ -55,4 +56,18 @@ message ChatMessage {
     string token =1;
     string username = 2;
     string text = 3;
+}
+
+message LeaderboardRequest {
+    int32 top_n = 1;
+}
+
+message LeaderboardEntry {
+    int32 rank = 1;
+    string username = 2;
+    int32 points = 3;
+}
+
+message LeaderboardReply {
+    repeated LeaderboardEntry entries = 1;
 }

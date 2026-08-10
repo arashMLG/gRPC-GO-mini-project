@@ -18,10 +18,11 @@ type server struct {
 	pb.UnimplementedGreeterServer
 	pb.UnimplementedGameServer
 
-	db       *sql.DB
-	mu       sync.Mutex
-	sessions map[string]string
-	clients  map[chan *pb.ChatMessage]bool
+	db            *sql.DB
+	mu            sync.Mutex
+	sessions      map[string]string
+	clients       map[chan *pb.ChatMessage]bool
+	boardWatchers map[chan struct{}]bool
 }
 
 func (s *server) SayHelloWorld(ctx context.Context, req *pb.HelloWorldRequest) (*pb.HelloWorldReplay, error) {
@@ -60,9 +61,10 @@ func main() {
 	}
 	s := grpc.NewServer()
 	pb.RegisterGameServer(s, &server{
-		db:       db,
-		sessions: make(map[string]string),
-		clients:  make(map[chan *pb.ChatMessage]bool),
+		db:            db,
+		sessions:      make(map[string]string),
+		clients:       make(map[chan *pb.ChatMessage]bool),
+		boardWatchers: make(map[chan struct{}]bool),
 	})
 
 	log.Printf("gRPC server listening on %s", lis.Addr())

@@ -62,7 +62,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("couldn't open chat : %v", err)
 	}
-	fmt.Printf("Connected to chatroom. type \"/chat\" to start chatting and \"/game\" to go back to game.\"/quit\" to quit.\n")
+	fmt.Printf("Connected to chatroom. type \"/chat\" to start chatting and \"/game\" to go back to game \"/leaderboard\" to turn leaderboard ON or OFF.\"/quit\" to quit.\n")
 
 	go func() {
 		for {
@@ -75,25 +75,45 @@ func main() {
 			}
 		}
 	}()
+	boardCtx, stopBoard := context.WithCancel(context.Background())
+	stopBoard()
+	boardOn := false
 
 	token := LoginRep.GetToken()
 	fmt.Println(LoginRep.GetMessage())
-	state := 0
+	const (
+		modeGame = iota
+		modeChat
+	)
+	state := modeGame
 	for {
 		text := ask("> ")
+		if text == "/leaderboard" {
+			if boardOn {
+				stopBoard()
+				boardOn = false
+				fmt.Println("Leaderboard Off!")
+			} else {
+				boardCtx, stopBoard = context.WithCancel(context.Background())
+				boardOn = true
+				go watchBoard(client, boardCtx)
+				fmt.Println("Leaderboard On!")
+			}
+			continue
+		}
 		if text == "/quit" {
 			break
 		}
-		if text == "/game" && state == 1 {
-			state = 0
+		if text == "/game" {
+			state = modeGame
 			continue
 		}
-		if text == "/chat" && state == 0 {
-			state = 1
+		if text == "/chat" {
+			state = modeChat
 			continue
 		}
 		switch state {
-		case 0:
+		case modeGame:
 			ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 			rep, err := client.Play(ctx, &pb.PlayRequest{Token: token, Word: text})
 			cancel()
@@ -103,7 +123,7 @@ func main() {
 			}
 			fmt.Printf("What gods think of you as a number : %+d\nWhat gods think of you in text: %s\n",
 				rep.GetPointsChange(), rep.GetMessage())
-		case 1:
+		case modeChat:
 			if text == "" {
 				continue
 			}
@@ -115,4 +135,23 @@ func main() {
 
 	}
 	fmt.Printf("meow")
+}
+
+func watchBoard(client pb.GameClient, ctx context.Context) {
+	stream, err := client.Leaderboard(ctx, &pb.LeaderboardRequest{TopN: 5})
+	if err != nil {
+		log.Printf("leaderboard failed: %v", err)
+		return
+	}
+	for {
+		reply, err := stream.Recv()
+		if err != nil {
+			return
+		}
+		fmt.Printf("\n--- LEADERBOARD ---\n")
+		for _, e := range reply.GetEntries() {
+			fmt.Printf("%d. %-12s %d\n", e.GetRank(), e.GetUsername(), e.GetPoints())
+		}
+		fmt.Print("> ")
+	}
 }

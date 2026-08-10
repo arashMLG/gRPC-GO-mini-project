@@ -121,10 +121,11 @@ var Greeter_ServiceDesc = grpc.ServiceDesc{
 }
 
 const (
-	Game_Register_FullMethodName = "/test.Game/Register"
-	Game_Login_FullMethodName    = "/test.Game/Login"
-	Game_Play_FullMethodName     = "/test.Game/Play"
-	Game_Chat_FullMethodName     = "/test.Game/Chat"
+	Game_Register_FullMethodName    = "/test.Game/Register"
+	Game_Login_FullMethodName       = "/test.Game/Login"
+	Game_Play_FullMethodName        = "/test.Game/Play"
+	Game_Chat_FullMethodName        = "/test.Game/Chat"
+	Game_Leaderboard_FullMethodName = "/test.Game/Leaderboard"
 )
 
 // GameClient is the client API for Game service.
@@ -135,6 +136,7 @@ type GameClient interface {
 	Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginReply, error)
 	Play(ctx context.Context, in *PlayRequest, opts ...grpc.CallOption) (*PlayReply, error)
 	Chat(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[ChatMessage, ChatMessage], error)
+	Leaderboard(ctx context.Context, in *LeaderboardRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[LeaderboardReply], error)
 }
 
 type gameClient struct {
@@ -188,6 +190,25 @@ func (c *gameClient) Chat(ctx context.Context, opts ...grpc.CallOption) (grpc.Bi
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
 type Game_ChatClient = grpc.BidiStreamingClient[ChatMessage, ChatMessage]
 
+func (c *gameClient) Leaderboard(ctx context.Context, in *LeaderboardRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[LeaderboardReply], error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	stream, err := c.cc.NewStream(ctx, &Game_ServiceDesc.Streams[1], Game_Leaderboard_FullMethodName, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &grpc.GenericClientStream[LeaderboardRequest, LeaderboardReply]{ClientStream: stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type Game_LeaderboardClient = grpc.ServerStreamingClient[LeaderboardReply]
+
 // GameServer is the server API for Game service.
 // All implementations must embed UnimplementedGameServer
 // for forward compatibility.
@@ -196,6 +217,7 @@ type GameServer interface {
 	Login(context.Context, *LoginRequest) (*LoginReply, error)
 	Play(context.Context, *PlayRequest) (*PlayReply, error)
 	Chat(grpc.BidiStreamingServer[ChatMessage, ChatMessage]) error
+	Leaderboard(*LeaderboardRequest, grpc.ServerStreamingServer[LeaderboardReply]) error
 	mustEmbedUnimplementedGameServer()
 }
 
@@ -217,6 +239,9 @@ func (UnimplementedGameServer) Play(context.Context, *PlayRequest) (*PlayReply, 
 }
 func (UnimplementedGameServer) Chat(grpc.BidiStreamingServer[ChatMessage, ChatMessage]) error {
 	return status.Error(codes.Unimplemented, "method Chat not implemented")
+}
+func (UnimplementedGameServer) Leaderboard(*LeaderboardRequest, grpc.ServerStreamingServer[LeaderboardReply]) error {
+	return status.Error(codes.Unimplemented, "method Leaderboard not implemented")
 }
 func (UnimplementedGameServer) mustEmbedUnimplementedGameServer() {}
 func (UnimplementedGameServer) testEmbeddedByValue()              {}
@@ -300,6 +325,17 @@ func _Game_Chat_Handler(srv interface{}, stream grpc.ServerStream) error {
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
 type Game_ChatServer = grpc.BidiStreamingServer[ChatMessage, ChatMessage]
 
+func _Game_Leaderboard_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(LeaderboardRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(GameServer).Leaderboard(m, &grpc.GenericServerStream[LeaderboardRequest, LeaderboardReply]{ServerStream: stream})
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type Game_LeaderboardServer = grpc.ServerStreamingServer[LeaderboardReply]
+
 // Game_ServiceDesc is the grpc.ServiceDesc for Game service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -326,6 +362,11 @@ var Game_ServiceDesc = grpc.ServiceDesc{
 			Handler:       _Game_Chat_Handler,
 			ServerStreams: true,
 			ClientStreams: true,
+		},
+		{
+			StreamName:    "Leaderboard",
+			Handler:       _Game_Leaderboard_Handler,
+			ServerStreams: true,
 		},
 	},
 	Metadata: "pb/test.proto",

@@ -481,6 +481,154 @@ func (x *ChatMessage) GetText() string {
 	return ""
 }
 
+type LeaderboardRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	TopN          int32                  `protobuf:"varint,1,opt,name=top_n,json=topN,proto3" json:"top_n,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *LeaderboardRequest) Reset() {
+	*x = LeaderboardRequest{}
+	mi := &file_pb_test_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *LeaderboardRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*LeaderboardRequest) ProtoMessage() {}
+
+func (x *LeaderboardRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_pb_test_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use LeaderboardRequest.ProtoReflect.Descriptor instead.
+func (*LeaderboardRequest) Descriptor() ([]byte, []int) {
+	return file_pb_test_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *LeaderboardRequest) GetTopN() int32 {
+	if x != nil {
+		return x.TopN
+	}
+	return 0
+}
+
+type LeaderboardEntry struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Rank          int32                  `protobuf:"varint,1,opt,name=rank,proto3" json:"rank,omitempty"`
+	Username      string                 `protobuf:"bytes,2,opt,name=username,proto3" json:"username,omitempty"`
+	Points        int32                  `protobuf:"varint,3,opt,name=points,proto3" json:"points,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *LeaderboardEntry) Reset() {
+	*x = LeaderboardEntry{}
+	mi := &file_pb_test_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *LeaderboardEntry) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*LeaderboardEntry) ProtoMessage() {}
+
+func (x *LeaderboardEntry) ProtoReflect() protoreflect.Message {
+	mi := &file_pb_test_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use LeaderboardEntry.ProtoReflect.Descriptor instead.
+func (*LeaderboardEntry) Descriptor() ([]byte, []int) {
+	return file_pb_test_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *LeaderboardEntry) GetRank() int32 {
+	if x != nil {
+		return x.Rank
+	}
+	return 0
+}
+
+func (x *LeaderboardEntry) GetUsername() string {
+	if x != nil {
+		return x.Username
+	}
+	return ""
+}
+
+func (x *LeaderboardEntry) GetPoints() int32 {
+	if x != nil {
+		return x.Points
+	}
+	return 0
+}
+
+type LeaderboardReply struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Entries       []*LeaderboardEntry    `protobuf:"bytes,1,rep,name=entries,proto3" json:"entries,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *LeaderboardReply) Reset() {
+	*x = LeaderboardReply{}
+	mi := &file_pb_test_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *LeaderboardReply) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*LeaderboardReply) ProtoMessage() {}
+
+func (x *LeaderboardReply) ProtoReflect() protoreflect.Message {
+	mi := &file_pb_test_proto_msgTypes[11]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use LeaderboardReply.ProtoReflect.Descriptor instead.
+func (*LeaderboardReply) Descriptor() ([]byte, []int) {
+	return file_pb_test_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *LeaderboardReply) GetEntries() []*LeaderboardEntry {
+	if x != nil {
+		return x.Entries
+	}
+	return nil
+}
+
 var File_pb_test_proto protoreflect.FileDescriptor
 
 const file_pb_test_proto_rawDesc = "" +
@@ -512,14 +660,23 @@ const file_pb_test_proto_rawDesc = "" +
 	"\vChatMessage\x12\x14\n" +
 	"\x05token\x18\x01 \x01(\tR\x05token\x12\x1a\n" +
 	"\busername\x18\x02 \x01(\tR\busername\x12\x12\n" +
-	"\x04text\x18\x03 \x01(\tR\x04text2K\n" +
+	"\x04text\x18\x03 \x01(\tR\x04text\")\n" +
+	"\x12LeaderboardRequest\x12\x13\n" +
+	"\x05top_n\x18\x01 \x01(\x05R\x04topN\"Z\n" +
+	"\x10LeaderboardEntry\x12\x12\n" +
+	"\x04rank\x18\x01 \x01(\x05R\x04rank\x12\x1a\n" +
+	"\busername\x18\x02 \x01(\tR\busername\x12\x16\n" +
+	"\x06points\x18\x03 \x01(\x05R\x06points\"D\n" +
+	"\x10LeaderboardReply\x120\n" +
+	"\aentries\x18\x01 \x03(\v2\x16.test.LeaderboardEntryR\aentries2K\n" +
 	"\aGreeter\x12@\n" +
-	"\rSayHelloWorld\x12\x17.test.HelloWorldRequest\x1a\x16.test.HelloWorldReplay2\xcb\x01\n" +
+	"\rSayHelloWorld\x12\x17.test.HelloWorldRequest\x1a\x16.test.HelloWorldReplay2\x8e\x02\n" +
 	"\x04Game\x126\n" +
 	"\bRegister\x12\x15.test.RegisterRequest\x1a\x13.test.RegisterReply\x12-\n" +
 	"\x05Login\x12\x12.test.LoginRequest\x1a\x10.test.LoginReply\x12*\n" +
 	"\x04Play\x12\x11.test.PlayRequest\x1a\x0f.test.PlayReply\x120\n" +
-	"\x04Chat\x12\x11.test.ChatMessage\x1a\x11.test.ChatMessage(\x010\x01B\n" +
+	"\x04Chat\x12\x11.test.ChatMessage\x1a\x11.test.ChatMessage(\x010\x01\x12A\n" +
+	"\vLeaderboard\x12\x18.test.LeaderboardRequest\x1a\x16.test.LeaderboardReply0\x01B\n" +
 	"Z\bmyGuy/pbb\x06proto3"
 
 var (
@@ -534,34 +691,40 @@ func file_pb_test_proto_rawDescGZIP() []byte {
 	return file_pb_test_proto_rawDescData
 }
 
-var file_pb_test_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
+var file_pb_test_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
 var file_pb_test_proto_goTypes = []any{
-	(*HelloWorldRequest)(nil), // 0: test.HelloWorldRequest
-	(*HelloWorldReplay)(nil),  // 1: test.HelloWorldReplay
-	(*RegisterRequest)(nil),   // 2: test.RegisterRequest
-	(*RegisterReply)(nil),     // 3: test.RegisterReply
-	(*LoginRequest)(nil),      // 4: test.LoginRequest
-	(*LoginReply)(nil),        // 5: test.LoginReply
-	(*PlayRequest)(nil),       // 6: test.PlayRequest
-	(*PlayReply)(nil),         // 7: test.PlayReply
-	(*ChatMessage)(nil),       // 8: test.ChatMessage
+	(*HelloWorldRequest)(nil),  // 0: test.HelloWorldRequest
+	(*HelloWorldReplay)(nil),   // 1: test.HelloWorldReplay
+	(*RegisterRequest)(nil),    // 2: test.RegisterRequest
+	(*RegisterReply)(nil),      // 3: test.RegisterReply
+	(*LoginRequest)(nil),       // 4: test.LoginRequest
+	(*LoginReply)(nil),         // 5: test.LoginReply
+	(*PlayRequest)(nil),        // 6: test.PlayRequest
+	(*PlayReply)(nil),          // 7: test.PlayReply
+	(*ChatMessage)(nil),        // 8: test.ChatMessage
+	(*LeaderboardRequest)(nil), // 9: test.LeaderboardRequest
+	(*LeaderboardEntry)(nil),   // 10: test.LeaderboardEntry
+	(*LeaderboardReply)(nil),   // 11: test.LeaderboardReply
 }
 var file_pb_test_proto_depIdxs = []int32{
-	0, // 0: test.Greeter.SayHelloWorld:input_type -> test.HelloWorldRequest
-	2, // 1: test.Game.Register:input_type -> test.RegisterRequest
-	4, // 2: test.Game.Login:input_type -> test.LoginRequest
-	6, // 3: test.Game.Play:input_type -> test.PlayRequest
-	8, // 4: test.Game.Chat:input_type -> test.ChatMessage
-	1, // 5: test.Greeter.SayHelloWorld:output_type -> test.HelloWorldReplay
-	3, // 6: test.Game.Register:output_type -> test.RegisterReply
-	5, // 7: test.Game.Login:output_type -> test.LoginReply
-	7, // 8: test.Game.Play:output_type -> test.PlayReply
-	8, // 9: test.Game.Chat:output_type -> test.ChatMessage
-	5, // [5:10] is the sub-list for method output_type
-	0, // [0:5] is the sub-list for method input_type
-	0, // [0:0] is the sub-list for extension type_name
-	0, // [0:0] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+	10, // 0: test.LeaderboardReply.entries:type_name -> test.LeaderboardEntry
+	0,  // 1: test.Greeter.SayHelloWorld:input_type -> test.HelloWorldRequest
+	2,  // 2: test.Game.Register:input_type -> test.RegisterRequest
+	4,  // 3: test.Game.Login:input_type -> test.LoginRequest
+	6,  // 4: test.Game.Play:input_type -> test.PlayRequest
+	8,  // 5: test.Game.Chat:input_type -> test.ChatMessage
+	9,  // 6: test.Game.Leaderboard:input_type -> test.LeaderboardRequest
+	1,  // 7: test.Greeter.SayHelloWorld:output_type -> test.HelloWorldReplay
+	3,  // 8: test.Game.Register:output_type -> test.RegisterReply
+	5,  // 9: test.Game.Login:output_type -> test.LoginReply
+	7,  // 10: test.Game.Play:output_type -> test.PlayReply
+	8,  // 11: test.Game.Chat:output_type -> test.ChatMessage
+	11, // 12: test.Game.Leaderboard:output_type -> test.LeaderboardReply
+	7,  // [7:13] is the sub-list for method output_type
+	1,  // [1:7] is the sub-list for method input_type
+	1,  // [1:1] is the sub-list for extension type_name
+	1,  // [1:1] is the sub-list for extension extendee
+	0,  // [0:1] is the sub-list for field type_name
 }
 
 func init() { file_pb_test_proto_init() }
@@ -575,7 +738,7 @@ func file_pb_test_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_pb_test_proto_rawDesc), len(file_pb_test_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   9,
+			NumMessages:   12,
 			NumExtensions: 0,
 			NumServices:   2,
 		},

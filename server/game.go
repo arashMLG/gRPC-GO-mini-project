@@ -50,6 +50,8 @@ func (s *server) Play(ctx context.Context, req *pb.PlayRequest) (*pb.PlayReply, 
 		message = fmt.Sprintf("Your value as Human: %d", int(total))
 	}
 
+	s.notifyBoard()
+
 	return &pb.PlayReply{
 		PointsChange: delta,
 		TotalPoints:  total,
