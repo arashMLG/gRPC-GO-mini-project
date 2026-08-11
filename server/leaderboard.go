@@ -1,8 +1,12 @@
 package main
 
 import (
+	"context"
+	"database/sql"
 	"log"
 	"myGuy/pb"
+
+	"github.com/redis/go-redis/v9"
 )
 
 func (s *server) Leaderboard(req *pb.LeaderboardRequest, stream pb.Game_LeaderboardServer) error {
@@ -39,33 +43,44 @@ func (s *server) Leaderboard(req *pb.LeaderboardRequest, stream pb.Game_Leaderbo
 }
 
 func (s *server) sendBoard(stream pb.Game_LeaderboardServer, topN int32) error {
-	rows, err := s.db.QueryContext(stream.Context(),
-		`SELECT username, points FROM users
-				ORDER BY points DESC , username ASC
-				LIMIT $1`, topN)
+	result, err := s.redis.ZRevRangeWithScores(stream.Context(), leaderboardKey, 0, int64(topN-1)).Result()
+	if err != nil {
+		return err
+	}
+
+	entries := make([]*pb.LeaderboardEntry, 0, len(result))
+	for i, z := range result {
+		entries = append(entries, &pb.LeaderboardEntry{
+			Rank:     int32(i + 1),
+			Username: z.Member.(string),
+			Points:   int32(z.Score),
+		})
+	}
+	return stream.Send(&pb.LeaderboardReply{Entries: entries})
+}
+
+func warmLeaderboardCache(ctx context.Context, db *sql.DB, rdb *redis.Client) error {
+	rows, err := db.Query("SELECT username, points FROM users")
 	if err != nil {
 		return err
 	}
 	defer rows.Close()
-	var entries []*pb.LeaderboardEntry
-	rank := int32(1)
+	var members []redis.Z
 	for rows.Next() {
 		var username string
 		var points int32
 		if err := rows.Scan(&username, &points); err != nil {
 			return err
 		}
-		entries = append(entries, &pb.LeaderboardEntry{
-			Rank:     rank,
-			Username: username,
-			Points:   points,
-		})
-		rank++
+		members = append(members, redis.Z{Score: float64(points), Member: username})
 	}
 	if err := rows.Err(); err != nil {
 		return err
 	}
-	return stream.Send(&pb.LeaderboardReply{Entries: entries})
+	if len(members) == 0 {
+		return nil
+	}
+	return rdb.ZAdd(ctx, leaderboardKey, members...).Err()
 }
 
 func (s *server) notifyBoard() {

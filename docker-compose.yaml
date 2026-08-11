@@ -17,6 +17,19 @@ services:
       timeout: 3s
       retries: 10
 
+  redis:
+    image: redis:7-alpine
+    command: redis-server --appendonly yes
+    ports:
+      - "6379:6379"
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 3s
+      timeout: 3s
+      retries: 10
+
   server:
     build:
       context: .
@@ -25,8 +38,11 @@ services:
       - "50051:50051"
     environment:
       DATABASE_URL: "postgres://arash:arash@db:5432/database?sslmode=disable"
+      REDIS_ADDR: "redis:6379"
     depends_on:
       db:
+        condition: service_healthy
+      redis:
         condition: service_healthy
 
   client:
@@ -43,3 +59,4 @@ services:
 
 volumes:
   pgdata:
+  redisdata:

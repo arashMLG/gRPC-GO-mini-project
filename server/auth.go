@@ -62,9 +62,9 @@ func (s *server) Login(ctx context.Context, req *pb.LoginRequest) (*pb.LoginRepl
 		return nil, fmt.Errorf("Error creating token : %w", err)
 	}
 
-	s.mu.Lock()
-	s.sessions[token] = req.Username
-	s.mu.Unlock()
+	if err := s.redis.Set(ctx, sessionKey(token), req.Username, sessionTTL).Err(); err != nil {
+		return nil, fmt.Errorf("Error saving session : %w", err)
+	}
 
 	return &pb.LoginReply{Token: token, Message: "Welcome to the GAME hahaha"}, nil
 }

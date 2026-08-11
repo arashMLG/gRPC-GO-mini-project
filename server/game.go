@@ -5,15 +5,14 @@ import (
 	"fmt"
 	"myGuy/pb"
 	"strings"
+
+	"github.com/redis/go-redis/v9"
 )
 
 func (s *server) Play(ctx context.Context, req *pb.PlayRequest) (*pb.PlayReply, error) {
-	s.mu.Lock()
-	username, ok := s.sessions[req.Token]
-	s.mu.Unlock()
-
-	if !ok {
-		return nil, fmt.Errorf("not logged in: unknown or missing token")
+	username, err := s.lookupSession(ctx, req.Token)
+	if err != nil {
+		return nil, err
 	}
 
 	var delta int32
@@ -39,11 +38,17 @@ func (s *server) Play(ctx context.Context, req *pb.PlayRequest) (*pb.PlayReply, 
 		message = "Unintelligible human"
 	}
 	var total int32
-	err := s.db.QueryRowContext(ctx,
+	err = s.db.QueryRowContext(ctx,
 		"UPDATE users SET points = points + $1 WHERE username = $2 RETURNING points",
 		delta, username).Scan(&total)
 	if err != nil {
 		return nil, fmt.Errorf("Error in upgrading points in SQL : %w", err)
+	}
+
+	if err := s.redis.ZAdd(ctx, leaderboardKey, redis.Z{
+		Score: float64(total), Member: username,
+	}).Err(); err != nil {
+		return nil, fmt.Errorf("Error in adding leaderboard score to redis cache : %w", err)
 	}
 
 	if strings.ToLower(strings.TrimSpace(req.Word)) == "status" {

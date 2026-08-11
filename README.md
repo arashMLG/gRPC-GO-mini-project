@@ -5,7 +5,7 @@ A simple gRPC mini project written in GO.
 
 ## Setting up Database (For MacOS)
 
-1. Install PostgreSQL using brew : ```brew install postgresql@16```
+1. Install PostgreSQL using brew : ```brew install postgresql@16``` and redis too ```brew install redis```
 2. Run PostgreSQL service using  : ```brew services start postgresql@16```
 3. Create database  : ```createdb database```
 4. Load the table from SQL file in project : ```psql database -f dbcode.sql```
@@ -27,4 +27,5 @@ First, we build using:
 ```docker compose up --build```
 
 The server and database starts running.
+Then we should build client: ```docker compose build client```.
 Then we can use ```docker compose run --rm client``` to run a new client instance (multiple instances are runnable)

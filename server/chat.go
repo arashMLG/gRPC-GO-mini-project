@@ -19,16 +19,18 @@ func (s *server) Chat(stream pb.Game_ChatServer) error {
 		}
 	}()
 
+	var username string
 	for {
 		in, err := stream.Recv()
 		if err != nil {
 			break
 		}
-		s.mu.Lock()
-		username, ok := s.sessions[in.GetToken()]
-		s.mu.Unlock()
-		if !ok {
-			continue
+		if username == "" {
+			u, err := s.lookupSession(stream.Context(), in.GetToken())
+			if err != nil {
+				continue
+			}
+			username = u
 		}
 		log.Printf("%s said: %s", username, in.GetText())
 		s.broadcast(&pb.ChatMessage{Username: username, Text: in.GetText()})
