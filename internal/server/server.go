@@ -1,11 +1,11 @@
-package main
+package server
 
 import (
 	"context"
 	"database/sql"
 	"fmt"
 	"log"
-	"myGuy/pb"
+	"myGuy/internal/pb"
 	"net"
 	"os"
 	"sync"
@@ -16,11 +16,14 @@ import (
 	"google.golang.org/grpc"
 )
 
+// sessionTTL controls how long a login token stays valid in Redis.
 const sessionTTL = 24 * time.Hour
+
+// leaderboardKey is the Redis sorted-set key backing the leaderboard cache.
 const leaderboardKey = "leaderboard"
 
 func sessionKey(token string) string {
-	return fmt.Sprintf("session:%s", token)
+	return "session:" + token
 }
 
 type server struct {
@@ -34,6 +37,19 @@ type server struct {
 	boardWatchers map[chan struct{}]bool
 }
 
+// lookupSession resolves a login token to a username via Redis, shared by
+// Play and Chat so both auth checks go through the same path.
+func (s *server) lookupSession(ctx context.Context, token string) (string, error) {
+	username, err := s.redis.Get(ctx, sessionKey(token)).Result()
+	if err == redis.Nil {
+		return "", fmt.Errorf("not logged in: unknown or missing token")
+	}
+	if err != nil {
+		return "", fmt.Errorf("session lookup failed: %w", err)
+	}
+	return username, nil
+}
+
 func (s *server) SayHelloWorld(ctx context.Context, req *pb.HelloWorldRequest) (*pb.HelloWorldReplay, error) {
 	name := req.GetName()
 	if name == "" {
@@ -45,18 +61,9 @@ func (s *server) SayHelloWorld(ctx context.Context, req *pb.HelloWorldRequest) (
 	}, nil
 }
 
-func (s *server) lookupSession(ctx context.Context, token string) (string, error) {
-	username, err := s.redis.Get(ctx, sessionKey(token)).Result()
-	if err == redis.Nil {
-		return "", fmt.Errorf("not logged in: unkownn or missing token")
-	}
-	if err != nil {
-		return "", fmt.Errorf("session lookup failed: %w", err)
-	}
-	return username, nil
-}
-
-func main() {
+// Run starts the gRPC server: connects to Postgres and Redis, warms the
+// leaderboard cache, and blocks serving requests until the process exits.
+func Run() {
 	dsn := os.Getenv("DATABASE_URL")
 	if dsn == "" {
 		dsn = "postgres://localhost:5432/database?sslmode=disable"
@@ -75,11 +82,11 @@ func main() {
 
 	log.Println("Connected to PostgreSQL")
 
-	redeisAddr := os.Getenv("REDIS_ADDR")
-	if redeisAddr == "" {
-		redeisAddr = "localhost:6379"
+	redisAddr := os.Getenv("REDIS_ADDR")
+	if redisAddr == "" {
+		redisAddr = "localhost:6379"
 	}
-	rdb := redis.NewClient(&redis.Options{Addr: redeisAddr})
+	rdb := redis.NewClient(&redis.Options{Addr: redisAddr})
 	if err := rdb.Ping(context.Background()).Err(); err != nil {
 		log.Fatalf("Error connecting to Redis : %v", err)
 	}

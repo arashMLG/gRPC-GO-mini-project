@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.6.2
 // - protoc             v7.35.1
-// source: pb/test.proto
+// source: test.proto
 
 package pb
 
@@ -117,7 +117,7 @@ var Greeter_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "pb/test.proto",
+	Metadata: "test.proto",
 }
 
 const (
@@ -369,5 +369,5 @@ var Game_ServiceDesc = grpc.ServiceDesc{
 			ServerStreams: true,
 		},
 	},
-	Metadata: "pb/test.proto",
+	Metadata: "test.proto",
 }

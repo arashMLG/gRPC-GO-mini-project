@@ -1,10 +1,10 @@
-package main
+package server
 
 import (
 	"context"
 	"database/sql"
 	"log"
-	"myGuy/pb"
+	"myGuy/internal/pb"
 
 	"github.com/redis/go-redis/v9"
 )
@@ -43,13 +43,13 @@ func (s *server) Leaderboard(req *pb.LeaderboardRequest, stream pb.Game_Leaderbo
 }
 
 func (s *server) sendBoard(stream pb.Game_LeaderboardServer, topN int32) error {
-	result, err := s.redis.ZRevRangeWithScores(stream.Context(), leaderboardKey, 0, int64(topN-1)).Result()
+	results, err := s.redis.ZRevRangeWithScores(stream.Context(), leaderboardKey, 0, int64(topN-1)).Result()
 	if err != nil {
 		return err
 	}
 
-	entries := make([]*pb.LeaderboardEntry, 0, len(result))
-	for i, z := range result {
+	entries := make([]*pb.LeaderboardEntry, 0, len(results))
+	for i, z := range results {
 		entries = append(entries, &pb.LeaderboardEntry{
 			Rank:     int32(i + 1),
 			Username: z.Member.(string),
@@ -59,12 +59,18 @@ func (s *server) sendBoard(stream pb.Game_LeaderboardServer, topN int32) error {
 	return stream.Send(&pb.LeaderboardReply{Entries: entries})
 }
 
+// warmLeaderboardCache loads every user's points from Postgres into the
+// Redis sorted set at startup, so the leaderboard is correct immediately
+// even against a freshly started (empty) Redis instance. Postgres stays the
+// durable source of truth; Redis is a fast index kept in sync on writes
+// (see Play in game.go) and rebuilt here on boot.
 func warmLeaderboardCache(ctx context.Context, db *sql.DB, rdb *redis.Client) error {
-	rows, err := db.Query("SELECT username, points FROM users")
+	rows, err := db.QueryContext(ctx, "SELECT username, points FROM users")
 	if err != nil {
 		return err
 	}
 	defer rows.Close()
+
 	var members []redis.Z
 	for rows.Next() {
 		var username string

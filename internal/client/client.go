@@ -1,11 +1,11 @@
-package main
+package client
 
 import (
 	"bufio"
 	"context"
 	"fmt"
 	"log"
-	"myGuy/pb"
+	"myGuy/internal/pb"
 	"os"
 	"strings"
 	"time"
@@ -14,7 +14,9 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 )
 
-func main() {
+// Run connects to the gRPC server, logs the user in, and drives the
+// interactive chat/game/leaderboard REPL until the user quits.
+func Run() {
 
 	addr := os.Getenv("SERVER_ADDR")
 	if addr == "" {

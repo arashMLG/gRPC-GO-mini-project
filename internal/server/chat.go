@@ -1,8 +1,8 @@
-package main
+package server
 
 import (
 	"log"
-	"myGuy/pb"
+	"myGuy/internal/pb"
 )
 
 func (s *server) Chat(stream pb.Game_ChatServer) error {

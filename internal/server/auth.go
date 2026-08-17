@@ -1,4 +1,4 @@
-package main
+package server
 
 import (
 	"context"
@@ -7,7 +7,7 @@ import (
 	"encoding/hex"
 	"errors"
 	"fmt"
-	"myGuy/pb"
+	"myGuy/internal/pb"
 
 	"golang.org/x/crypto/bcrypt"
 )

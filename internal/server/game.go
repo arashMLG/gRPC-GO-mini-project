@@ -1,9 +1,10 @@
-package main
+package server
 
 import (
 	"context"
 	"fmt"
-	"myGuy/pb"
+	"log"
+	"myGuy/internal/pb"
 	"strings"
 
 	"github.com/redis/go-redis/v9"
@@ -45,10 +46,8 @@ func (s *server) Play(ctx context.Context, req *pb.PlayRequest) (*pb.PlayReply, 
 		return nil, fmt.Errorf("Error in upgrading points in SQL : %w", err)
 	}
 
-	if err := s.redis.ZAdd(ctx, leaderboardKey, redis.Z{
-		Score: float64(total), Member: username,
-	}).Err(); err != nil {
-		return nil, fmt.Errorf("Error in adding leaderboard score to redis cache : %w", err)
+	if err := s.redis.ZAdd(ctx, leaderboardKey, redis.Z{Score: float64(total), Member: username}).Err(); err != nil {
+		log.Printf("leaderboard: failed to update redis cache for %s: %v", username, err)
 	}
 
 	if strings.ToLower(strings.TrimSpace(req.Word)) == "status" {

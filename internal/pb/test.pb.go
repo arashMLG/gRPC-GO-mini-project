@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.36.11
 // 	protoc        v7.35.1
-// source: pb/test.proto
+// source: test.proto
 
 package pb
 
@@ -30,7 +30,7 @@ type HelloWorldRequest struct {
 
 func (x *HelloWorldRequest) Reset() {
 	*x = HelloWorldRequest{}
-	mi := &file_pb_test_proto_msgTypes[0]
+	mi := &file_test_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -42,7 +42,7 @@ func (x *HelloWorldRequest) String() string {
 func (*HelloWorldRequest) ProtoMessage() {}
 
 func (x *HelloWorldRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pb_test_proto_msgTypes[0]
+	mi := &file_test_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -55,7 +55,7 @@ func (x *HelloWorldRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use HelloWorldRequest.ProtoReflect.Descriptor instead.
 func (*HelloWorldRequest) Descriptor() ([]byte, []int) {
-	return file_pb_test_proto_rawDescGZIP(), []int{0}
+	return file_test_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *HelloWorldRequest) GetName() string {
@@ -74,7 +74,7 @@ type HelloWorldReplay struct {
 
 func (x *HelloWorldReplay) Reset() {
 	*x = HelloWorldReplay{}
-	mi := &file_pb_test_proto_msgTypes[1]
+	mi := &file_test_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -86,7 +86,7 @@ func (x *HelloWorldReplay) String() string {
 func (*HelloWorldReplay) ProtoMessage() {}
 
 func (x *HelloWorldReplay) ProtoReflect() protoreflect.Message {
-	mi := &file_pb_test_proto_msgTypes[1]
+	mi := &file_test_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -99,7 +99,7 @@ func (x *HelloWorldReplay) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use HelloWorldReplay.ProtoReflect.Descriptor instead.
 func (*HelloWorldReplay) Descriptor() ([]byte, []int) {
-	return file_pb_test_proto_rawDescGZIP(), []int{1}
+	return file_test_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *HelloWorldReplay) GetMessage() string {
@@ -119,7 +119,7 @@ type RegisterRequest struct {
 
 func (x *RegisterRequest) Reset() {
 	*x = RegisterRequest{}
-	mi := &file_pb_test_proto_msgTypes[2]
+	mi := &file_test_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -131,7 +131,7 @@ func (x *RegisterRequest) String() string {
 func (*RegisterRequest) ProtoMessage() {}
 
 func (x *RegisterRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pb_test_proto_msgTypes[2]
+	mi := &file_test_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -144,7 +144,7 @@ func (x *RegisterRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RegisterRequest.ProtoReflect.Descriptor instead.
 func (*RegisterRequest) Descriptor() ([]byte, []int) {
-	return file_pb_test_proto_rawDescGZIP(), []int{2}
+	return file_test_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *RegisterRequest) GetUsername() string {
@@ -170,7 +170,7 @@ type RegisterReply struct {
 
 func (x *RegisterReply) Reset() {
 	*x = RegisterReply{}
-	mi := &file_pb_test_proto_msgTypes[3]
+	mi := &file_test_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -182,7 +182,7 @@ func (x *RegisterReply) String() string {
 func (*RegisterReply) ProtoMessage() {}
 
 func (x *RegisterReply) ProtoReflect() protoreflect.Message {
-	mi := &file_pb_test_proto_msgTypes[3]
+	mi := &file_test_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -195,7 +195,7 @@ func (x *RegisterReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RegisterReply.ProtoReflect.Descriptor instead.
 func (*RegisterReply) Descriptor() ([]byte, []int) {
-	return file_pb_test_proto_rawDescGZIP(), []int{3}
+	return file_test_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *RegisterReply) GetMessage() string {
@@ -215,7 +215,7 @@ type LoginRequest struct {
 
 func (x *LoginRequest) Reset() {
 	*x = LoginRequest{}
-	mi := &file_pb_test_proto_msgTypes[4]
+	mi := &file_test_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -227,7 +227,7 @@ func (x *LoginRequest) String() string {
 func (*LoginRequest) ProtoMessage() {}
 
 func (x *LoginRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pb_test_proto_msgTypes[4]
+	mi := &file_test_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -240,7 +240,7 @@ func (x *LoginRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LoginRequest.ProtoReflect.Descriptor instead.
 func (*LoginRequest) Descriptor() ([]byte, []int) {
-	return file_pb_test_proto_rawDescGZIP(), []int{4}
+	return file_test_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *LoginRequest) GetUsername() string {
@@ -267,7 +267,7 @@ type LoginReply struct {
 
 func (x *LoginReply) Reset() {
 	*x = LoginReply{}
-	mi := &file_pb_test_proto_msgTypes[5]
+	mi := &file_test_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -279,7 +279,7 @@ func (x *LoginReply) String() string {
 func (*LoginReply) ProtoMessage() {}
 
 func (x *LoginReply) ProtoReflect() protoreflect.Message {
-	mi := &file_pb_test_proto_msgTypes[5]
+	mi := &file_test_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -292,7 +292,7 @@ func (x *LoginReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LoginReply.ProtoReflect.Descriptor instead.
 func (*LoginReply) Descriptor() ([]byte, []int) {
-	return file_pb_test_proto_rawDescGZIP(), []int{5}
+	return file_test_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *LoginReply) GetToken() string {
@@ -319,7 +319,7 @@ type PlayRequest struct {
 
 func (x *PlayRequest) Reset() {
 	*x = PlayRequest{}
-	mi := &file_pb_test_proto_msgTypes[6]
+	mi := &file_test_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -331,7 +331,7 @@ func (x *PlayRequest) String() string {
 func (*PlayRequest) ProtoMessage() {}
 
 func (x *PlayRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pb_test_proto_msgTypes[6]
+	mi := &file_test_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -344,7 +344,7 @@ func (x *PlayRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PlayRequest.ProtoReflect.Descriptor instead.
 func (*PlayRequest) Descriptor() ([]byte, []int) {
-	return file_pb_test_proto_rawDescGZIP(), []int{6}
+	return file_test_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *PlayRequest) GetToken() string {
@@ -372,7 +372,7 @@ type PlayReply struct {
 
 func (x *PlayReply) Reset() {
 	*x = PlayReply{}
-	mi := &file_pb_test_proto_msgTypes[7]
+	mi := &file_test_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -384,7 +384,7 @@ func (x *PlayReply) String() string {
 func (*PlayReply) ProtoMessage() {}
 
 func (x *PlayReply) ProtoReflect() protoreflect.Message {
-	mi := &file_pb_test_proto_msgTypes[7]
+	mi := &file_test_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -397,7 +397,7 @@ func (x *PlayReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PlayReply.ProtoReflect.Descriptor instead.
 func (*PlayReply) Descriptor() ([]byte, []int) {
-	return file_pb_test_proto_rawDescGZIP(), []int{7}
+	return file_test_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *PlayReply) GetPointsChange() int32 {
@@ -432,7 +432,7 @@ type ChatMessage struct {
 
 func (x *ChatMessage) Reset() {
 	*x = ChatMessage{}
-	mi := &file_pb_test_proto_msgTypes[8]
+	mi := &file_test_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -444,7 +444,7 @@ func (x *ChatMessage) String() string {
 func (*ChatMessage) ProtoMessage() {}
 
 func (x *ChatMessage) ProtoReflect() protoreflect.Message {
-	mi := &file_pb_test_proto_msgTypes[8]
+	mi := &file_test_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -457,7 +457,7 @@ func (x *ChatMessage) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ChatMessage.ProtoReflect.Descriptor instead.
 func (*ChatMessage) Descriptor() ([]byte, []int) {
-	return file_pb_test_proto_rawDescGZIP(), []int{8}
+	return file_test_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *ChatMessage) GetToken() string {
@@ -490,7 +490,7 @@ type LeaderboardRequest struct {
 
 func (x *LeaderboardRequest) Reset() {
 	*x = LeaderboardRequest{}
-	mi := &file_pb_test_proto_msgTypes[9]
+	mi := &file_test_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -502,7 +502,7 @@ func (x *LeaderboardRequest) String() string {
 func (*LeaderboardRequest) ProtoMessage() {}
 
 func (x *LeaderboardRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pb_test_proto_msgTypes[9]
+	mi := &file_test_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -515,7 +515,7 @@ func (x *LeaderboardRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LeaderboardRequest.ProtoReflect.Descriptor instead.
 func (*LeaderboardRequest) Descriptor() ([]byte, []int) {
-	return file_pb_test_proto_rawDescGZIP(), []int{9}
+	return file_test_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *LeaderboardRequest) GetTopN() int32 {
@@ -536,7 +536,7 @@ type LeaderboardEntry struct {
 
 func (x *LeaderboardEntry) Reset() {
 	*x = LeaderboardEntry{}
-	mi := &file_pb_test_proto_msgTypes[10]
+	mi := &file_test_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -548,7 +548,7 @@ func (x *LeaderboardEntry) String() string {
 func (*LeaderboardEntry) ProtoMessage() {}
 
 func (x *LeaderboardEntry) ProtoReflect() protoreflect.Message {
-	mi := &file_pb_test_proto_msgTypes[10]
+	mi := &file_test_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -561,7 +561,7 @@ func (x *LeaderboardEntry) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LeaderboardEntry.ProtoReflect.Descriptor instead.
 func (*LeaderboardEntry) Descriptor() ([]byte, []int) {
-	return file_pb_test_proto_rawDescGZIP(), []int{10}
+	return file_test_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *LeaderboardEntry) GetRank() int32 {
@@ -594,7 +594,7 @@ type LeaderboardReply struct {
 
 func (x *LeaderboardReply) Reset() {
 	*x = LeaderboardReply{}
-	mi := &file_pb_test_proto_msgTypes[11]
+	mi := &file_test_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -606,7 +606,7 @@ func (x *LeaderboardReply) String() string {
 func (*LeaderboardReply) ProtoMessage() {}
 
 func (x *LeaderboardReply) ProtoReflect() protoreflect.Message {
-	mi := &file_pb_test_proto_msgTypes[11]
+	mi := &file_test_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -619,7 +619,7 @@ func (x *LeaderboardReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LeaderboardReply.ProtoReflect.Descriptor instead.
 func (*LeaderboardReply) Descriptor() ([]byte, []int) {
-	return file_pb_test_proto_rawDescGZIP(), []int{11}
+	return file_test_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *LeaderboardReply) GetEntries() []*LeaderboardEntry {
@@ -629,11 +629,12 @@ func (x *LeaderboardReply) GetEntries() []*LeaderboardEntry {
 	return nil
 }
 
-var File_pb_test_proto protoreflect.FileDescriptor
+var File_test_proto protoreflect.FileDescriptor
 
-const file_pb_test_proto_rawDesc = "" +
+const file_test_proto_rawDesc = "" +
 	"\n" +
-	"\rpb/test.proto\x12\x04test\"'\n" +
+	"\n" +
+	"test.proto\x12\x04test\"'\n" +
 	"\x11HelloWorldRequest\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\",\n" +
 	"\x10HelloWorldReplay\x12\x18\n" +
@@ -676,23 +677,22 @@ const file_pb_test_proto_rawDesc = "" +
 	"\x05Login\x12\x12.test.LoginRequest\x1a\x10.test.LoginReply\x12*\n" +
 	"\x04Play\x12\x11.test.PlayRequest\x1a\x0f.test.PlayReply\x120\n" +
 	"\x04Chat\x12\x11.test.ChatMessage\x1a\x11.test.ChatMessage(\x010\x01\x12A\n" +
-	"\vLeaderboard\x12\x18.test.LeaderboardRequest\x1a\x16.test.LeaderboardReply0\x01B\n" +
-	"Z\bmyGuy/pbb\x06proto3"
+	"\vLeaderboard\x12\x18.test.LeaderboardRequest\x1a\x16.test.LeaderboardReply0\x01B\x13Z\x11myGuy/internal/pbb\x06proto3"
 
 var (
-	file_pb_test_proto_rawDescOnce sync.Once
-	file_pb_test_proto_rawDescData []byte
+	file_test_proto_rawDescOnce sync.Once
+	file_test_proto_rawDescData []byte
 )
 
-func file_pb_test_proto_rawDescGZIP() []byte {
-	file_pb_test_proto_rawDescOnce.Do(func() {
-		file_pb_test_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_pb_test_proto_rawDesc), len(file_pb_test_proto_rawDesc)))
+func file_test_proto_rawDescGZIP() []byte {
+	file_test_proto_rawDescOnce.Do(func() {
+		file_test_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_test_proto_rawDesc), len(file_test_proto_rawDesc)))
 	})
-	return file_pb_test_proto_rawDescData
+	return file_test_proto_rawDescData
 }
 
-var file_pb_test_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
-var file_pb_test_proto_goTypes = []any{
+var file_test_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
+var file_test_proto_goTypes = []any{
 	(*HelloWorldRequest)(nil),  // 0: test.HelloWorldRequest
 	(*HelloWorldReplay)(nil),   // 1: test.HelloWorldReplay
 	(*RegisterRequest)(nil),    // 2: test.RegisterRequest
@@ -706,7 +706,7 @@ var file_pb_test_proto_goTypes = []any{
 	(*LeaderboardEntry)(nil),   // 10: test.LeaderboardEntry
 	(*LeaderboardReply)(nil),   // 11: test.LeaderboardReply
 }
-var file_pb_test_proto_depIdxs = []int32{
+var file_test_proto_depIdxs = []int32{
 	10, // 0: test.LeaderboardReply.entries:type_name -> test.LeaderboardEntry
 	0,  // 1: test.Greeter.SayHelloWorld:input_type -> test.HelloWorldRequest
 	2,  // 2: test.Game.Register:input_type -> test.RegisterRequest
@@ -727,26 +727,26 @@ var file_pb_test_proto_depIdxs = []int32{
 	0,  // [0:1] is the sub-list for field type_name
 }
 
-func init() { file_pb_test_proto_init() }
-func file_pb_test_proto_init() {
-	if File_pb_test_proto != nil {
+func init() { file_test_proto_init() }
+func file_test_proto_init() {
+	if File_test_proto != nil {
 		return
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_pb_test_proto_rawDesc), len(file_pb_test_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_test_proto_rawDesc), len(file_test_proto_rawDesc)),
 			NumEnums:      0,
 			NumMessages:   12,
 			NumExtensions: 0,
 			NumServices:   2,
 		},
-		GoTypes:           file_pb_test_proto_goTypes,
-		DependencyIndexes: file_pb_test_proto_depIdxs,
-		MessageInfos:      file_pb_test_proto_msgTypes,
+		GoTypes:           file_test_proto_goTypes,
+		DependencyIndexes: file_test_proto_depIdxs,
+		MessageInfos:      file_test_proto_msgTypes,
 	}.Build()
-	File_pb_test_proto = out.File
-	file_pb_test_proto_goTypes = nil
-	file_pb_test_proto_depIdxs = nil
+	File_test_proto = out.File
+	file_test_proto_goTypes = nil
+	file_test_proto_depIdxs = nil
 }
