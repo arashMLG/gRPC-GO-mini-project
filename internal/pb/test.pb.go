@@ -629,6 +629,152 @@ func (x *LeaderboardReply) GetEntries() []*LeaderboardEntry {
 	return nil
 }
 
+type LogEntry struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Only the first entry of a stream needs to carry the token; the server
+	// resolves it once and reuses it for the rest of the stream.
+	Token          string `protobuf:"bytes,1,opt,name=token,proto3" json:"token,omitempty"`
+	Level          string `protobuf:"bytes,2,opt,name=level,proto3" json:"level,omitempty"`
+	Message        string `protobuf:"bytes,3,opt,name=message,proto3" json:"message,omitempty"`
+	Source         string `protobuf:"bytes,4,opt,name=source,proto3" json:"source,omitempty"`
+	LoggedAtUnixMs int64  `protobuf:"varint,5,opt,name=logged_at_unix_ms,json=loggedAtUnixMs,proto3" json:"logged_at_unix_ms,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
+}
+
+func (x *LogEntry) Reset() {
+	*x = LogEntry{}
+	mi := &file_test_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *LogEntry) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*LogEntry) ProtoMessage() {}
+
+func (x *LogEntry) ProtoReflect() protoreflect.Message {
+	mi := &file_test_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use LogEntry.ProtoReflect.Descriptor instead.
+func (*LogEntry) Descriptor() ([]byte, []int) {
+	return file_test_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *LogEntry) GetToken() string {
+	if x != nil {
+		return x.Token
+	}
+	return ""
+}
+
+func (x *LogEntry) GetLevel() string {
+	if x != nil {
+		return x.Level
+	}
+	return ""
+}
+
+func (x *LogEntry) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
+func (x *LogEntry) GetSource() string {
+	if x != nil {
+		return x.Source
+	}
+	return ""
+}
+
+func (x *LogEntry) GetLoggedAtUnixMs() int64 {
+	if x != nil {
+		return x.LoggedAtUnixMs
+	}
+	return 0
+}
+
+type IngestSummary struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Accepted      int64                  `protobuf:"varint,1,opt,name=accepted,proto3" json:"accepted,omitempty"`
+	Written       int64                  `protobuf:"varint,2,opt,name=written,proto3" json:"written,omitempty"`
+	Retries       int64                  `protobuf:"varint,3,opt,name=retries,proto3" json:"retries,omitempty"`
+	Message       string                 `protobuf:"bytes,4,opt,name=message,proto3" json:"message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *IngestSummary) Reset() {
+	*x = IngestSummary{}
+	mi := &file_test_proto_msgTypes[13]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *IngestSummary) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*IngestSummary) ProtoMessage() {}
+
+func (x *IngestSummary) ProtoReflect() protoreflect.Message {
+	mi := &file_test_proto_msgTypes[13]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use IngestSummary.ProtoReflect.Descriptor instead.
+func (*IngestSummary) Descriptor() ([]byte, []int) {
+	return file_test_proto_rawDescGZIP(), []int{13}
+}
+
+func (x *IngestSummary) GetAccepted() int64 {
+	if x != nil {
+		return x.Accepted
+	}
+	return 0
+}
+
+func (x *IngestSummary) GetWritten() int64 {
+	if x != nil {
+		return x.Written
+	}
+	return 0
+}
+
+func (x *IngestSummary) GetRetries() int64 {
+	if x != nil {
+		return x.Retries
+	}
+	return 0
+}
+
+func (x *IngestSummary) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
 var File_test_proto protoreflect.FileDescriptor
 
 const file_test_proto_rawDesc = "" +
@@ -669,7 +815,18 @@ const file_test_proto_rawDesc = "" +
 	"\busername\x18\x02 \x01(\tR\busername\x12\x16\n" +
 	"\x06points\x18\x03 \x01(\x05R\x06points\"D\n" +
 	"\x10LeaderboardReply\x120\n" +
-	"\aentries\x18\x01 \x03(\v2\x16.test.LeaderboardEntryR\aentries2K\n" +
+	"\aentries\x18\x01 \x03(\v2\x16.test.LeaderboardEntryR\aentries\"\x93\x01\n" +
+	"\bLogEntry\x12\x14\n" +
+	"\x05token\x18\x01 \x01(\tR\x05token\x12\x14\n" +
+	"\x05level\x18\x02 \x01(\tR\x05level\x12\x18\n" +
+	"\amessage\x18\x03 \x01(\tR\amessage\x12\x16\n" +
+	"\x06source\x18\x04 \x01(\tR\x06source\x12)\n" +
+	"\x11logged_at_unix_ms\x18\x05 \x01(\x03R\x0eloggedAtUnixMs\"y\n" +
+	"\rIngestSummary\x12\x1a\n" +
+	"\baccepted\x18\x01 \x01(\x03R\baccepted\x12\x18\n" +
+	"\awritten\x18\x02 \x01(\x03R\awritten\x12\x18\n" +
+	"\aretries\x18\x03 \x01(\x03R\aretries\x12\x18\n" +
+	"\amessage\x18\x04 \x01(\tR\amessage2K\n" +
 	"\aGreeter\x12@\n" +
 	"\rSayHelloWorld\x12\x17.test.HelloWorldRequest\x1a\x16.test.HelloWorldReplay2\x8e\x02\n" +
 	"\x04Game\x126\n" +
@@ -677,7 +834,9 @@ const file_test_proto_rawDesc = "" +
 	"\x05Login\x12\x12.test.LoginRequest\x1a\x10.test.LoginReply\x12*\n" +
 	"\x04Play\x12\x11.test.PlayRequest\x1a\x0f.test.PlayReply\x120\n" +
 	"\x04Chat\x12\x11.test.ChatMessage\x1a\x11.test.ChatMessage(\x010\x01\x12A\n" +
-	"\vLeaderboard\x12\x18.test.LeaderboardRequest\x1a\x16.test.LeaderboardReply0\x01B\x13Z\x11myGuy/internal/pbb\x06proto3"
+	"\vLeaderboard\x12\x18.test.LeaderboardRequest\x1a\x16.test.LeaderboardReply0\x012<\n" +
+	"\tLogIngest\x12/\n" +
+	"\x06Ingest\x12\x0e.test.LogEntry\x1a\x13.test.IngestSummary(\x01B\x13Z\x11myGuy/internal/pbb\x06proto3"
 
 var (
 	file_test_proto_rawDescOnce sync.Once
@@ -691,7 +850,7 @@ func file_test_proto_rawDescGZIP() []byte {
 	return file_test_proto_rawDescData
 }
 
-var file_test_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
+var file_test_proto_msgTypes = make([]protoimpl.MessageInfo, 14)
 var file_test_proto_goTypes = []any{
 	(*HelloWorldRequest)(nil),  // 0: test.HelloWorldRequest
 	(*HelloWorldReplay)(nil),   // 1: test.HelloWorldReplay
@@ -705,6 +864,8 @@ var file_test_proto_goTypes = []any{
 	(*LeaderboardRequest)(nil), // 9: test.LeaderboardRequest
 	(*LeaderboardEntry)(nil),   // 10: test.LeaderboardEntry
 	(*LeaderboardReply)(nil),   // 11: test.LeaderboardReply
+	(*LogEntry)(nil),           // 12: test.LogEntry
+	(*IngestSummary)(nil),      // 13: test.IngestSummary
 }
 var file_test_proto_depIdxs = []int32{
 	10, // 0: test.LeaderboardReply.entries:type_name -> test.LeaderboardEntry
@@ -714,14 +875,16 @@ var file_test_proto_depIdxs = []int32{
 	6,  // 4: test.Game.Play:input_type -> test.PlayRequest
 	8,  // 5: test.Game.Chat:input_type -> test.ChatMessage
 	9,  // 6: test.Game.Leaderboard:input_type -> test.LeaderboardRequest
-	1,  // 7: test.Greeter.SayHelloWorld:output_type -> test.HelloWorldReplay
-	3,  // 8: test.Game.Register:output_type -> test.RegisterReply
-	5,  // 9: test.Game.Login:output_type -> test.LoginReply
-	7,  // 10: test.Game.Play:output_type -> test.PlayReply
-	8,  // 11: test.Game.Chat:output_type -> test.ChatMessage
-	11, // 12: test.Game.Leaderboard:output_type -> test.LeaderboardReply
-	7,  // [7:13] is the sub-list for method output_type
-	1,  // [1:7] is the sub-list for method input_type
+	12, // 7: test.LogIngest.Ingest:input_type -> test.LogEntry
+	1,  // 8: test.Greeter.SayHelloWorld:output_type -> test.HelloWorldReplay
+	3,  // 9: test.Game.Register:output_type -> test.RegisterReply
+	5,  // 10: test.Game.Login:output_type -> test.LoginReply
+	7,  // 11: test.Game.Play:output_type -> test.PlayReply
+	8,  // 12: test.Game.Chat:output_type -> test.ChatMessage
+	11, // 13: test.Game.Leaderboard:output_type -> test.LeaderboardReply
+	13, // 14: test.LogIngest.Ingest:output_type -> test.IngestSummary
+	8,  // [8:15] is the sub-list for method output_type
+	1,  // [1:8] is the sub-list for method input_type
 	1,  // [1:1] is the sub-list for extension type_name
 	1,  // [1:1] is the sub-list for extension extendee
 	0,  // [0:1] is the sub-list for field type_name
@@ -738,9 +901,9 @@ func file_test_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_test_proto_rawDesc), len(file_test_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   12,
+			NumMessages:   14,
 			NumExtensions: 0,
-			NumServices:   2,
+			NumServices:   3,
 		},
 		GoTypes:           file_test_proto_goTypes,
 		DependencyIndexes: file_test_proto_depIdxs,

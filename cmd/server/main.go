@@ -9,6 +9,8 @@ import (
 	"database/sql"
 	"log"
 	"net"
+	"os/signal"
+	"syscall"
 
 	memoryadapter "myGuy/internal/adapter/memory"
 	postgresadapter "myGuy/internal/adapter/postgres"
@@ -26,6 +28,11 @@ import (
 )
 
 func main() {
+	// signalCtx is cancelled on Ctrl-C or SIGTERM, which starts the graceful
+	// shutdown sequence at the bottom of this function.
+	signalCtx, stopSignals := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
+	defer stopSignals()
+
 	ctx := context.Background()
 	cfg := config.Load()
 
@@ -50,11 +57,8 @@ func main() {
 	log.Println("Connected to Redis")
 
 	// --- adapters: concrete implementations of the domain ports -----------
-	// Swapping any single line here changes where that concern is stored
-	// without touching a service. Moving sessions back into process memory,
-	// for instance, means writing a memory session repository and changing
-	// only the sessionRepo line.
 	userRepo := postgresadapter.NewUserRepository(db)
+	logRepo := postgresadapter.NewLogRepository(db)
 	sessionRepo := redisadapter.NewSessionRepository(rdb)
 	boardRepo := redisadapter.NewLeaderboardRepository(rdb)
 	hasher := securityadapter.NewBcryptHasher(bcrypt.DefaultCost)
@@ -68,14 +72,24 @@ func main() {
 	chatService := service.NewChatService(chatHub)
 	boardService := service.NewLeaderboardService(userRepo, boardRepo, boardNotifier)
 
-	// Rebuild the leaderboard cache from durable storage before serving, so
-	// a fresh or emptied Redis does not serve an empty board.
+	// The log ingestor runs its own goroutines, so unlike the other services
+	// it has a lifecycle: Start here, Stop during shutdown below.
+	logIngestor := service.NewLogIngestor(logRepo, service.DefaultIngestConfig())
+
+	// ingestCtx is NOT the signal context. Cancelling it aborts in-flight
+	// retries and abandons buffered logs, so it stays alive through shutdown
+	// and only Stop's deadline bounds the drain.
+	ingestCtx, abortIngest := context.WithCancel(context.Background())
+	defer abortIngest()
+	logIngestor.Start(ingestCtx)
+
 	if err := boardService.WarmCache(ctx); err != nil {
 		log.Fatalf("Error warming leaderboard cache : %v", err)
 	}
 
 	// --- transport: the inbound adapter, injected with the services -------
-	handler := grpctransport.NewGameHandler(authService, gameService, chatService, boardService)
+	gameHandler := grpctransport.NewGameHandler(authService, gameService, chatService, boardService)
+	logHandler := grpctransport.NewLogHandler(authService, logIngestor)
 
 	lis, err := net.Listen("tcp", cfg.ListenAddr)
 	if err != nil {
@@ -83,10 +97,28 @@ func main() {
 	}
 
 	grpcServer := grpc.NewServer()
-	pb.RegisterGameServer(grpcServer, handler)
+	pb.RegisterGameServer(grpcServer, gameHandler)
+	pb.RegisterLogIngestServer(grpcServer, logHandler)
 
-	log.Printf("gRPC server listening on %s", lis.Addr())
-	if err := grpcServer.Serve(lis); err != nil {
-		log.Fatalf("Failed to serve: %v", err)
+	go func() {
+		log.Printf("gRPC server listening on %s", lis.Addr())
+		if err := grpcServer.Serve(lis); err != nil {
+			log.Fatalf("Failed to serve: %v", err)
+		}
+	}()
+
+	// --- shutdown ---------------------------------------------------------
+	<-signalCtx.Done()
+	log.Println("Shutting down: refusing new work, draining buffered logs")
+
+	// Stop accepting RPCs first, so no new logs arrive while draining.
+	grpcServer.GracefulStop()
+
+	drainCtx, cancelDrain := context.WithTimeout(context.Background(), cfg.ShutdownGrace)
+	defer cancelDrain()
+
+	if err := logIngestor.Stop(drainCtx); err != nil {
+		log.Printf("Log drain did not finish within %s: %v", cfg.ShutdownGrace, err)
 	}
+	log.Println("Shutdown complete")
 }

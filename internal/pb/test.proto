@@ -71,3 +71,31 @@ message LeaderboardEntry {
 message LeaderboardReply {
     repeated LeaderboardEntry entries = 1;
 }
+
+// LogIngest takes application logs.
+//
+// Ingest is CLIENT STREAMING, not unary: the client opens the connection
+// once and pushes many entries over it, and the server answers a single
+// summary when the client is done. A unary RPC would pay a full
+// request/response round trip per log line; here the cost is amortised over
+// the whole stream.
+service LogIngest {
+    rpc Ingest (stream LogEntry) returns (IngestSummary);
+}
+
+message LogEntry {
+    // Only the first entry of a stream needs to carry the token; the server
+    // resolves it once and reuses it for the rest of the stream.
+    string token = 1;
+    string level = 2;
+    string message = 3;
+    string source = 4;
+    int64 logged_at_unix_ms = 5;
+}
+
+message IngestSummary {
+    int64 accepted = 1;
+    int64 written = 2;
+    int64 retries = 3;
+    string message = 4;
+}

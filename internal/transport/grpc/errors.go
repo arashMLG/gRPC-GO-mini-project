@@ -28,6 +28,10 @@ func toStatusError(err error) error {
 		return status.Error(codes.Unauthenticated, err.Error())
 	case errors.Is(err, domain.ErrUserNotFound):
 		return status.Error(codes.NotFound, err.Error())
+	case errors.Is(err, domain.ErrIngestorStopped):
+		// Unavailable tells a well-behaved client this is worth retrying
+		// against another server, unlike an Internal error.
+		return status.Error(codes.Unavailable, err.Error())
 	default:
 		// Anything unrecognised is an infrastructure failure, not something
 		// the caller did wrong.

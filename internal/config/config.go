@@ -15,6 +15,10 @@ type Config struct {
 	RedisAddr   string
 	ListenAddr  string
 	SessionTTL  time.Duration
+
+	// ShutdownGrace bounds how long the server waits for buffered logs to
+	// reach the database before giving up and exiting.
+	ShutdownGrace time.Duration
 }
 
 // Load reads configuration from the environment, applying defaults suited to
@@ -25,6 +29,8 @@ func Load() Config {
 		RedisAddr:   env("REDIS_ADDR", "localhost:6379"),
 		ListenAddr:  env("LISTEN_ADDR", ":50051"),
 		SessionTTL:  24 * time.Hour,
+
+		ShutdownGrace: 30 * time.Second,
 	}
 }
 

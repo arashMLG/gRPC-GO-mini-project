@@ -40,6 +40,62 @@ Choosing which implementation satisfies each interface happens once, in
 [cmd/server/main.go](cmd/server/main.go). Changing where something is stored
 is a change to that wiring, not to any business logic.
 
+## Log ingestion pipeline
+
+Logs are **not** written one row per RPC. The path is:
+
+```
+client ──stream──> Ingest handler ──> queue ──> dispatcher ──> workers ──> Postgres
+                   (client streaming)          (500 or 2s)     (bulk + retry)
+```
+
+- **Client streaming** (`LogIngest.Ingest`): one open connection carries many
+  entries, instead of a request/response round trip per line.
+- **Batching**: a batch is cut when it reaches **500 entries** or when
+  **2 seconds** pass, whichever happens first, then written with a single
+  multi-row `INSERT`.
+- **Outage tolerance**: a failed write is retried with exponential backoff and
+  never abandoned. While workers retry, batches queue up, and once the queue
+  fills `Submit` blocks — pushing backpressure through the gRPC stream to the
+  client rather than dropping entries.
+
+### Demonstrating a database outage
+
+Terminal 1 — start everything:
+
+```bash
+docker compose up --build
+```
+
+Terminal 2 — generate steady log traffic:
+
+```bash
+go run ./cmd/logload -rate 200 -duration 40s
+```
+
+Terminal 3 — take the database away for ten seconds, then bring it back:
+
+```bash
+docker compose pause db && sleep 10 && docker compose unpause db
+```
+
+`pause` freezes the container (connections hang) rather than closing it,
+which is the more hostile version of the scenario. The server log will show
+workers retrying during the outage and then writing the backlog once Postgres
+returns. Confirm nothing was lost:
+
+```bash
+docker compose exec db psql -U arash -d database -c "SELECT count(*) FROM logs;"
+```
+
+The same scenario runs as an automated test, with no Docker required:
+
+```bash
+go test ./internal/service/ -run TestSurvivesTenSecondDatabaseOutage -v
+```
+
+Use `go test -short ./...` to skip that ten-second test during normal runs.
+
 ## Setting up Database (For MacOS)
 
 1. Install PostgreSQL using brew : ```brew install postgresql@16```

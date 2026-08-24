@@ -371,3 +371,114 @@ var Game_ServiceDesc = grpc.ServiceDesc{
 	},
 	Metadata: "test.proto",
 }
+
+const (
+	LogIngest_Ingest_FullMethodName = "/test.LogIngest/Ingest"
+)
+
+// LogIngestClient is the client API for LogIngest service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+//
+// LogIngest takes application logs.
+//
+// Ingest is CLIENT STREAMING, not unary: the client opens the connection
+// once and pushes many entries over it, and the server answers a single
+// summary when the client is done. A unary RPC would pay a full
+// request/response round trip per log line; here the cost is amortised over
+// the whole stream.
+type LogIngestClient interface {
+	Ingest(ctx context.Context, opts ...grpc.CallOption) (grpc.ClientStreamingClient[LogEntry, IngestSummary], error)
+}
+
+type logIngestClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewLogIngestClient(cc grpc.ClientConnInterface) LogIngestClient {
+	return &logIngestClient{cc}
+}
+
+func (c *logIngestClient) Ingest(ctx context.Context, opts ...grpc.CallOption) (grpc.ClientStreamingClient[LogEntry, IngestSummary], error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	stream, err := c.cc.NewStream(ctx, &LogIngest_ServiceDesc.Streams[0], LogIngest_Ingest_FullMethodName, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &grpc.GenericClientStream[LogEntry, IngestSummary]{ClientStream: stream}
+	return x, nil
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type LogIngest_IngestClient = grpc.ClientStreamingClient[LogEntry, IngestSummary]
+
+// LogIngestServer is the server API for LogIngest service.
+// All implementations must embed UnimplementedLogIngestServer
+// for forward compatibility.
+//
+// LogIngest takes application logs.
+//
+// Ingest is CLIENT STREAMING, not unary: the client opens the connection
+// once and pushes many entries over it, and the server answers a single
+// summary when the client is done. A unary RPC would pay a full
+// request/response round trip per log line; here the cost is amortised over
+// the whole stream.
+type LogIngestServer interface {
+	Ingest(grpc.ClientStreamingServer[LogEntry, IngestSummary]) error
+	mustEmbedUnimplementedLogIngestServer()
+}
+
+// UnimplementedLogIngestServer must be embedded to have
+// forward compatible implementations.
+//
+// NOTE: this should be embedded by value instead of pointer to avoid a nil
+// pointer dereference when methods are called.
+type UnimplementedLogIngestServer struct{}
+
+func (UnimplementedLogIngestServer) Ingest(grpc.ClientStreamingServer[LogEntry, IngestSummary]) error {
+	return status.Error(codes.Unimplemented, "method Ingest not implemented")
+}
+func (UnimplementedLogIngestServer) mustEmbedUnimplementedLogIngestServer() {}
+func (UnimplementedLogIngestServer) testEmbeddedByValue()                   {}
+
+// UnsafeLogIngestServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to LogIngestServer will
+// result in compilation errors.
+type UnsafeLogIngestServer interface {
+	mustEmbedUnimplementedLogIngestServer()
+}
+
+func RegisterLogIngestServer(s grpc.ServiceRegistrar, srv LogIngestServer) {
+	// If the following call panics, it indicates UnimplementedLogIngestServer was
+	// embedded by pointer and is nil.  This will cause panics if an
+	// unimplemented method is ever invoked, so we test this at initialization
+	// time to prevent it from happening at runtime later due to I/O.
+	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
+		t.testEmbeddedByValue()
+	}
+	s.RegisterService(&LogIngest_ServiceDesc, srv)
+}
+
+func _LogIngest_Ingest_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(LogIngestServer).Ingest(&grpc.GenericServerStream[LogEntry, IngestSummary]{ServerStream: stream})
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type LogIngest_IngestServer = grpc.ClientStreamingServer[LogEntry, IngestSummary]
+
+// LogIngest_ServiceDesc is the grpc.ServiceDesc for LogIngest service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var LogIngest_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "test.LogIngest",
+	HandlerType: (*LogIngestServer)(nil),
+	Methods:     []grpc.MethodDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "Ingest",
+			Handler:       _LogIngest_Ingest_Handler,
+			ClientStreams: true,
+		},
+	},
+	Metadata: "test.proto",
+}
