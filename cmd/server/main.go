@@ -11,6 +11,7 @@ import (
 	"net"
 	"os/signal"
 	"syscall"
+	"time"
 
 	memoryadapter "myGuy/internal/adapter/memory"
 	postgresadapter "myGuy/internal/adapter/postgres"
@@ -42,6 +43,9 @@ func main() {
 		log.Fatalf("Error configuring database : %v", err)
 	}
 	defer db.Close()
+	db.SetMaxOpenConns(25)
+	db.SetMaxIdleConns(25)
+	db.SetConnMaxLifetime(5 * time.Minute)
 
 	if err := db.PingContext(ctx); err != nil {
 		log.Fatalf("Error opening database : %v", err)
